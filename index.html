@@ -142,6 +142,27 @@
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(0,172,203,0.22);
     }
+    .toolbar input[type="text"] {
+      font: inherit;
+      font-family: 'Bai Jamjuree', system-ui, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--fg);
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.45rem 0.7rem;
+      width: 8rem;
+      min-width: 7rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .toolbar input[type="text"]:hover { border-color: var(--accent); }
+    .toolbar input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,172,203,0.22);
+    }
+    .toolbar input[type="text"]::placeholder { color: var(--muted); opacity: 0.7; }
     .toolbar .hint {
       flex: 1;
       min-width: 100%;
@@ -811,6 +832,14 @@
         <option value="EveryMatrix">EveryMatrix</option>
       </select>
     </label>
+    <label class="dev-only">Wallet Balance
+      <input type="text" id="walletInp" placeholder="e.g. 100" inputmode="decimal" autocomplete="off">
+    </label>
+    <label class="advanced-toggle dev-only">
+      <input type="checkbox" id="cheatMinesChk">
+      <span class="switch"></span>
+      <span class="lbl">Always Win (Mines)</span>
+    </label>
     <label class="dev-only">Theme filter
       <select id="themeSel">
         <option value="">All themes</option>
@@ -1049,9 +1078,13 @@
       var LS_CUR    = 'solidicon-currency';
       var LS_VENDOR = 'solidicon-vendor';
       var LS_ADV    = 'solidicon-advanced';
+      var LS_WALLET = 'solidicon-wallet';
+      var LS_CHEAT_MINES = 'solidicon-cheat-mines';
       var langSel       = document.getElementById('langSel');
       var curSel        = document.getElementById('curSel');
       var vendorSel     = document.getElementById('vendorSel');
+      var walletInp     = document.getElementById('walletInp');
+      var cheatMinesChk = document.getElementById('cheatMinesChk');
       var advToggle     = document.getElementById('advToggle');
       var player        = document.getElementById('player');
       var playerFrame   = document.getElementById('playerFrame');
@@ -1078,13 +1111,15 @@
       var themeSel = document.getElementById('themeSel');
       var LS_THEME_FILTER = 'solidicon-theme-filter';
       function applyThemeFilter() {
-        var theme = (advToggle.checked && themeSel.value) ? themeSel.value : '';
+        var seg = (advToggle.checked && themeSel.value) ? themeSel.value : '';
         document.querySelectorAll('a.card[data-base]').forEach(function (card) {
-          if (!theme) { card.style.display = ''; return; }
+          if (!seg) { card.style.display = ''; return; }
           var meta = card.querySelector('.meta');
           var themesStr = (meta && meta.getAttribute('data-themes')) || '';
-          var hasTheme = themesStr.split(',').map(function (s) { return s.trim(); }).indexOf(theme) >= 0;
-          card.style.display = hasTheme ? '' : 'none';
+          var match = themesStr.split(',').some(function (t) {
+            return t.trim().split('_').pop() === seg;
+          });
+          card.style.display = match ? '' : 'none';
         });
       }
       function syncDev() {
@@ -1236,9 +1271,12 @@
       var savedLang   = localStorage.getItem(LS_LANG);
       var savedCur    = localStorage.getItem(LS_CUR);
       var savedVendor = localStorage.getItem(LS_VENDOR);
+      var savedWallet = localStorage.getItem(LS_WALLET);
       if (savedLang)   langSel.value   = savedLang;
       if (savedCur)    curSel.value    = savedCur;
       if (savedVendor !== null) vendorSel.value = savedVendor;
+      if (savedWallet !== null) walletInp.value = savedWallet;
+      cheatMinesChk.checked = localStorage.getItem(LS_CHEAT_MINES) === '1';
 
       var allThemes = new Set();
       document.querySelectorAll('.meta[data-themes]').forEach(function (m) {
@@ -1247,22 +1285,16 @@
           if (t) allThemes.add(t);
         });
       });
-      var allThemesArr = Array.from(allThemes).sort();
-      var lastSegCounts = {};
-      allThemesArr.forEach(function (t) {
-        var last = t.split('_').pop();
-        lastSegCounts[last] = (lastSegCounts[last] || 0) + 1;
-      });
-      allThemesArr.forEach(function (t) {
+      var lastSegments = new Set();
+      allThemes.forEach(function (t) { lastSegments.add(t.split('_').pop()); });
+      Array.from(lastSegments).sort().forEach(function (seg) {
         var opt = document.createElement('option');
-        opt.value = t;
-        var parts = t.split('_');
-        var last = parts[parts.length - 1];
-        opt.textContent = (lastSegCounts[last] > 1 && parts.length > 1) ? (last + ' (' + t + ')') : last;
+        opt.value = seg;
+        opt.textContent = seg;
         themeSel.appendChild(opt);
       });
       var savedThemeFilter = localStorage.getItem(LS_THEME_FILTER) || '';
-      if (savedThemeFilter && allThemes.has(savedThemeFilter)) themeSel.value = savedThemeFilter;
+      if (savedThemeFilter && lastSegments.has(savedThemeFilter)) themeSel.value = savedThemeFilter;
       themeSel.addEventListener('change', function () {
         localStorage.setItem(LS_THEME_FILTER, themeSel.value);
         applyThemeFilter();
@@ -1271,16 +1303,28 @@
       function apply() {
         var lang   = langSel.value;
         var cur    = curSel.value;
-        var vendor = advToggle.checked ? vendorSel.value : '';
+        var devOn  = advToggle.checked;
+        var vendor = devOn ? vendorSel.value : '';
+        var wallet = devOn ? walletInp.value.trim() : '';
+        var cheatMines = devOn && cheatMinesChk.checked;
         localStorage.setItem(LS_LANG, lang);
         localStorage.setItem(LS_CUR, cur);
         localStorage.setItem(LS_VENDOR, vendorSel.value);
+        localStorage.setItem(LS_WALLET, walletInp.value);
+        localStorage.setItem(LS_CHEAT_MINES, cheatMinesChk.checked ? '1' : '0');
         for (var i = 0; i < cards.length; i++) {
           var url = new URL(cards[i].dataset.base);
           url.searchParams.set('Lang', lang);
           url.searchParams.set('FakeCultureCode', cur);
           if (vendor) url.searchParams.set('ExternalVendorIntegration', vendor);
           else url.searchParams.delete('ExternalVendorIntegration');
+          if (wallet) url.searchParams.set('FakeWalletBalance', wallet);
+          else url.searchParams.delete('FakeWalletBalance');
+          var isMines = cards[i].querySelector('.tag.mines') !== null;
+          if (isMines) {
+            if (cheatMines) url.searchParams.set('dbgmockhelios', 'true');
+            else { url.searchParams.delete('dbgmockhelios'); url.searchParams.delete('DbgMockHelios'); }
+          }
           cards[i].href = url.toString();
         }
       }
@@ -1288,6 +1332,8 @@
       langSel.addEventListener('change', apply);
       curSel.addEventListener('change', apply);
       vendorSel.addEventListener('change', apply);
+      walletInp.addEventListener('input', apply);
+      cheatMinesChk.addEventListener('change', apply);
       syncDev();
       apply();
     })();
