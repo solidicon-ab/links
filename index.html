@@ -79,7 +79,7 @@
       padding-bottom: 1rem;
       border-bottom: 1px solid var(--border);
     }
-    .brand { display: flex; align-items: center; gap: 0.7rem; }
+    .brand { display: flex; align-items: center; gap: 0.7rem; cursor: pointer; }
     .brand .logotype {
       height: 2.1rem;
       width: auto;
@@ -441,9 +441,9 @@
       box-shadow: 0 24px 60px rgba(0,0,0,0.55);
     }
     .player.viewport-portrait iframe {
-      height: min(92vh, 980px);
+      height: min(98vh, 1100px);
       width: auto;
-      max-width: 90vw;
+      max-width: 96vw;
       aspect-ratio: 9 / 16;
     }
     .player.viewport-landscape iframe {
@@ -548,6 +548,25 @@
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 0.1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .pa-hint {
+      font-family: 'Kanit', system-ui, sans-serif;
+      font-size: 0.5rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--warm);
+      padding: 0.05rem 0.4rem;
+      border: 1px solid rgba(246,82,33,0.4);
+      border-radius: 999px;
+      cursor: help;
+    }
+    @media (prefers-color-scheme: light) {
+      .pa-hint { color: var(--warm); border-color: rgba(185,59,22,0.45); }
     }
     .pa-section button,
     .pa-section select {
@@ -673,7 +692,7 @@
 </head>
 <body>
   <header>
-    <div class="brand">
+    <div class="brand" id="brandReset" role="button" tabindex="0" title="Reset to default view" aria-label="Reset to default view">
       <img class="logotype for-dark"  src="images/logotype-white.png" alt="Solidicon">
       <img class="logotype for-light" src="images/logotype-black.png" alt="Solidicon">
     </div>
@@ -1034,11 +1053,11 @@
   <div class="player" id="player" aria-hidden="true">
     <div class="player-actions" id="playerActions">
       <div class="pa-section">
-        <div class="pa-label">Send to game</div>
+        <div class="pa-label">Send to game <span class="pa-hint" title="Game only listens when ExternalVendorIntegration=EveryMatrix">needs EveryMatrix</span></div>
         <button type="button" data-msg='{"name":"stopAutoplay","sender":"emwindow"}' title="postMessage({name:'stopAutoplay'})">Stop autoplay</button>
       </div>
       <div class="pa-section">
-        <div class="pa-label">Force close websocket</div>
+        <div class="pa-label">Force close websocket <span class="pa-hint" title="Game has no handler for this message yet">needs game impl</span></div>
         <button type="button" data-msg='{"name":"forceCloseWebsocket","reason":"servicewindow","sender":"emwindow"}'>Service Window</button>
         <button type="button" data-msg='{"name":"forceCloseWebsocket","reason":"idling","sender":"emwindow"}'>Idling</button>
         <button type="button" data-msg='{"name":"forceCloseWebsocket","reason":"reconnect","sender":"emwindow"}'>Reconnect</button>
@@ -1050,7 +1069,7 @@
         <button type="button" data-msg='{"name":"forceCloseWebsocket","reason":"inactiveWindow","sender":"emwindow"}'>Inactive Window</button>
       </div>
       <div class="pa-section">
-        <div class="pa-label">Force next server error</div>
+        <div class="pa-label">Force next server error <span class="pa-hint" title="Game has no handler for this message yet">needs game impl</span></div>
         <div class="pa-row">
           <select id="errorCodeSel">
             <option value="100">100 — Generic Error</option>
@@ -1165,8 +1184,21 @@
         applyThemeFilter();
       }
       var syncActionsVisibility = syncDev;
+      function resetDevControls() {
+        showThemesToggle.checked = false;
+        themeSel.value = '';
+        vendorSel.value = '';
+        walletInp.value = '';
+        cheatMinesChk.checked = false;
+        localStorage.setItem(LS_SHOW_THEMES, '0');
+        localStorage.setItem(LS_THEME_FILTER, '');
+        localStorage.setItem(LS_VENDOR, '');
+        localStorage.setItem(LS_WALLET, '');
+        localStorage.setItem(LS_CHEAT_MINES, '0');
+      }
       advToggle.addEventListener('change', function () {
         localStorage.setItem(LS_ADV, advToggle.checked ? '1' : '0');
+        resetDevControls();
         syncDev();
         apply();
       });
@@ -1177,6 +1209,12 @@
         player.setAttribute('aria-hidden', 'false');
         document.body.classList.add('player-open');
         setViewport(advToggle.checked ? 'portrait' : 'desktop');
+        if (advToggle.checked) {
+          player.classList.add('ui-hidden');
+          toggleUiBtn.classList.add('active');
+          toggleUiBtn.title = 'Show dev panels';
+          toggleUiBtn.setAttribute('aria-label', 'Show dev panels');
+        }
         syncActionsVisibility();
       }
       function closePlayer() {
@@ -1385,6 +1423,30 @@
       vendorSel.addEventListener('change', apply);
       walletInp.addEventListener('input', apply);
       cheatMinesChk.addEventListener('change', apply);
+
+      var brandReset = document.getElementById('brandReset');
+      function resetToDefaultView() {
+        if (player.classList.contains('open')) closePlayer();
+        advToggle.checked = false;
+        showThemesToggle.checked = false;
+        themeSel.value = '';
+        vendorSel.value = '';
+        walletInp.value = '';
+        cheatMinesChk.checked = false;
+        localStorage.setItem(LS_ADV, '0');
+        localStorage.setItem(LS_SHOW_THEMES, '0');
+        localStorage.setItem(LS_THEME_FILTER, '');
+        localStorage.setItem(LS_VENDOR, '');
+        localStorage.setItem(LS_WALLET, '');
+        localStorage.setItem(LS_CHEAT_MINES, '0');
+        syncDev();
+        apply();
+      }
+      brandReset.addEventListener('click', resetToDefaultView);
+      brandReset.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); resetToDefaultView(); }
+      });
+
       syncDev();
       apply();
     })();
