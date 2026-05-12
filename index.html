@@ -274,25 +274,7 @@
       .tag.soon      { color: var(--accent); }
     }
 
-    .flag {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      width: 1.7rem;
-      height: auto;
-      aspect-ratio: 3 / 2;
-      object-fit: cover;
-      border-radius: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08);
-      background: rgba(0,0,0,0.25);
-      z-index: 1;
-      pointer-events: none;
-    }
-    @media (min-width: 600px) {
-      .flag { width: 2rem; top: 0.6rem; right: 0.6rem; }
-    }
-
-    .lang-flags {
+.lang-flags {
       display: flex;
       gap: 3px;
       margin-top: 0.45rem;
@@ -528,16 +510,8 @@
       }
 
       var cards = document.querySelectorAll('a.card[data-base]');
-      var flags = [];
       var langFlags = [];
       cards.forEach(function (card) {
-        var corner = document.createElement('img');
-        corner.className = 'flag';
-        corner.alt = '';
-        corner.decoding = 'async';
-        card.appendChild(corner);
-        flags.push(corner);
-
         var meta = card.querySelector('.meta');
         var supported = (meta.dataset.langs || DEFAULT_LANGS).split(',');
         var row = document.createElement('div');
@@ -574,16 +548,11 @@
         var cur  = curSel.value;
         localStorage.setItem(LS_LANG, lang);
         localStorage.setItem(LS_CUR, cur);
-        var cornerSrc = flagSrc(lang);
         for (var i = 0; i < cards.length; i++) {
           var url = new URL(cards[i].dataset.base);
           url.searchParams.set('Lang', lang);
           url.searchParams.set('FakeCultureCode', cur);
           cards[i].href = url.toString();
-        }
-        for (var j = 0; j < flags.length; j++) {
-          flags[j].src = cornerSrc;
-          flags[j].alt = lang;
         }
         for (var k = 0; k < langFlags.length; k++) {
           if (langFlags[k].dataset.lang === lang) langFlags[k].classList.add('active');
