@@ -172,6 +172,9 @@
         var(--card);
       position: relative;
     }
+    .dev-bar + .dev-bar { margin-top: 0.25rem; }
+    body.dev-on .dev-bar { margin-bottom: 0.7rem; }
+    body.dev-on .dev-bar:last-of-type { margin-bottom: 1.4rem; }
     @media (prefers-color-scheme: light) {
       .dev-bar {
         border-color: rgba(0,132,156,0.3);
@@ -441,9 +444,9 @@
       box-shadow: 0 24px 60px rgba(0,0,0,0.55);
     }
     .player.viewport-portrait iframe {
-      height: min(98vh, 1100px);
+      height: min(95vh, 1040px);
       width: auto;
-      max-width: 96vw;
+      max-width: 93vw;
       aspect-ratio: 9 / 16;
     }
     .player.viewport-landscape iframe {
@@ -898,6 +901,12 @@
         <option value="">All themes</option>
       </select>
     </label>
+    <label>Branding override
+      <input type="text" id="brandingInp" placeholder="e.g. worldcup" autocomplete="off" spellcheck="false">
+    </label>
+    <label>GameVariant override
+      <input type="text" id="variantInp" placeholder="e.g. Chicken" autocomplete="off" spellcheck="false">
+    </label>
     <label class="advanced-toggle">
       <input type="checkbox" id="cheatMinesChk">
       <span class="switch"></span>
@@ -907,6 +916,45 @@
       <input type="checkbox" id="showThemesToggle">
       <span class="switch"></span>
       <span class="lbl">Show themes</span>
+    </label>
+  </div>
+
+  <div class="toolbar dev-bar dev-only">
+    <span class="dev-bar-label">Game flags</span>
+    <label class="advanced-toggle">
+      <input type="checkbox" id="flagHome">
+      <span class="switch"></span>
+      <span class="lbl">Show home button</span>
+    </label>
+    <label class="advanced-toggle">
+      <input type="checkbox" id="flagMute">
+      <span class="switch"></span>
+      <span class="lbl">Mute audio</span>
+    </label>
+    <label class="advanced-toggle">
+      <input type="checkbox" id="flagHideChat">
+      <span class="switch"></span>
+      <span class="lbl">Hide chat</span>
+    </label>
+    <label class="advanced-toggle">
+      <input type="checkbox" id="flagHowToPlay">
+      <span class="switch"></span>
+      <span class="lbl">Force how-to-play</span>
+    </label>
+    <label class="advanced-toggle">
+      <input type="checkbox" id="flagRedeem">
+      <span class="switch"></span>
+      <span class="lbl">Redeem code panel</span>
+    </label>
+    <label class="advanced-toggle">
+      <input type="checkbox" id="flagFps">
+      <span class="switch"></span>
+      <span class="lbl">FPS meter</span>
+    </label>
+    <label class="advanced-toggle">
+      <input type="checkbox" id="flagMockHelios">
+      <span class="switch"></span>
+      <span class="lbl">Mock backend</span>
     </label>
   </div>
 
@@ -1133,11 +1181,31 @@
       var LS_ADV    = 'solidicon-advanced';
       var LS_WALLET = 'solidicon-wallet';
       var LS_CHEAT_MINES = 'solidicon-cheat-mines';
+      var LS_BRANDING = 'solidicon-branding';
+      var LS_VARIANT  = 'solidicon-variant';
       var langSel       = document.getElementById('langSel');
       var curSel        = document.getElementById('curSel');
       var vendorSel     = document.getElementById('vendorSel');
       var walletInp     = document.getElementById('walletInp');
+      var brandingInp   = document.getElementById('brandingInp');
+      var variantInp    = document.getElementById('variantInp');
       var cheatMinesChk = document.getElementById('cheatMinesChk');
+      var flagHome        = document.getElementById('flagHome');
+      var flagMute        = document.getElementById('flagMute');
+      var flagHideChat    = document.getElementById('flagHideChat');
+      var flagHowToPlay   = document.getElementById('flagHowToPlay');
+      var flagRedeem      = document.getElementById('flagRedeem');
+      var flagFps         = document.getElementById('flagFps');
+      var flagMockHelios  = document.getElementById('flagMockHelios');
+      var GAME_FLAGS = [
+        { el: flagHome,        ls: 'solidicon-flag-home',        param: 'NavigateToOnExit',        value: '_about:blank' },
+        { el: flagMute,        ls: 'solidicon-flag-mute',        param: 'Mute',                    value: 'true' },
+        { el: flagHideChat,    ls: 'solidicon-flag-hidechat',    param: 'EnableChat',              value: 'false' },
+        { el: flagHowToPlay,   ls: 'solidicon-flag-htp',         param: 'DbgEnableHowToPlayPopup', value: 'true' },
+        { el: flagRedeem,      ls: 'solidicon-flag-redeem',      param: 'EnableFreeBetsRedemption',value: 'true' },
+        { el: flagFps,         ls: 'solidicon-flag-fps',         param: 'FpsMeter',                value: 'true' },
+        { el: flagMockHelios,  ls: 'solidicon-flag-mockhelios',  param: 'DbgMockHelios',           value: 'true' }
+      ];
       var advToggle     = document.getElementById('advToggle');
       var player        = document.getElementById('player');
       var playerFrame   = document.getElementById('playerFrame');
@@ -1208,7 +1276,7 @@
         player.classList.add('open');
         player.setAttribute('aria-hidden', 'false');
         document.body.classList.add('player-open');
-        setViewport(advToggle.checked ? 'portrait' : 'desktop');
+        setViewport('portrait');
         if (advToggle.checked) {
           player.classList.add('ui-hidden');
           toggleUiBtn.classList.add('active');
@@ -1341,15 +1409,20 @@
         meta.appendChild(row);
       });
 
-      var savedLang   = localStorage.getItem(LS_LANG);
-      var savedCur    = localStorage.getItem(LS_CUR);
-      var savedVendor = localStorage.getItem(LS_VENDOR);
-      var savedWallet = localStorage.getItem(LS_WALLET);
+      var savedLang     = localStorage.getItem(LS_LANG);
+      var savedCur      = localStorage.getItem(LS_CUR);
+      var savedVendor   = localStorage.getItem(LS_VENDOR);
+      var savedWallet   = localStorage.getItem(LS_WALLET);
+      var savedBranding = localStorage.getItem(LS_BRANDING);
+      var savedVariant  = localStorage.getItem(LS_VARIANT);
       if (savedLang)   langSel.value   = savedLang;
       if (savedCur)    curSel.value    = savedCur;
       if (savedVendor !== null) vendorSel.value = savedVendor;
       if (savedWallet !== null) walletInp.value = savedWallet;
+      if (savedBranding !== null) brandingInp.value = savedBranding;
+      if (savedVariant !== null) variantInp.value = savedVariant;
       cheatMinesChk.checked = localStorage.getItem(LS_CHEAT_MINES) === '1';
+      GAME_FLAGS.forEach(function (f) { f.el.checked = localStorage.getItem(f.ls) === '1'; });
 
       var allThemes = new Set();
       document.querySelectorAll('.meta[data-themes]').forEach(function (m) {
@@ -1391,12 +1464,17 @@
         var wallet = devOn ? walletInp.value.trim() : '';
         var cheatMines = devOn && cheatMinesChk.checked;
         var theme  = devOn ? themeSel.value : '';
-        var brand  = theme ? THEME_TO_BRANDING[theme.toLowerCase()] : '';
+        var brandOverride   = devOn ? brandingInp.value.trim() : '';
+        var variantOverride = devOn ? variantInp.value.trim() : '';
+        var brand  = brandOverride || (theme ? THEME_TO_BRANDING[theme.toLowerCase()] : '');
         localStorage.setItem(LS_LANG, lang);
         localStorage.setItem(LS_CUR, cur);
         localStorage.setItem(LS_VENDOR, vendorSel.value);
         localStorage.setItem(LS_WALLET, walletInp.value);
+        localStorage.setItem(LS_BRANDING, brandingInp.value);
+        localStorage.setItem(LS_VARIANT, variantInp.value);
         localStorage.setItem(LS_CHEAT_MINES, cheatMinesChk.checked ? '1' : '0');
+        GAME_FLAGS.forEach(function (f) { localStorage.setItem(f.ls, f.el.checked ? '1' : '0'); });
         for (var i = 0; i < cards.length; i++) {
           var url = new URL(cards[i].dataset.base);
           url.searchParams.set('Lang', lang);
@@ -1407,13 +1485,18 @@
           else url.searchParams.delete('FakeWalletBalance');
           if (brand) {
             url.searchParams.set('Branding', brand);
-            if (url.searchParams.get('GameVariant') === 'Chicken') url.searchParams.delete('GameVariant');
+            if (!variantOverride && url.searchParams.get('GameVariant') === 'Chicken') url.searchParams.delete('GameVariant');
           } else url.searchParams.delete('Branding');
+          if (variantOverride) url.searchParams.set('GameVariant', variantOverride);
           var isMines = cards[i].querySelector('.tag.mines') !== null;
           if (isMines) {
             if (cheatMines) url.searchParams.set('dbgmockhelios', 'true');
             else { url.searchParams.delete('dbgmockhelios'); url.searchParams.delete('DbgMockHelios'); }
           }
+          GAME_FLAGS.forEach(function (f) {
+            if (devOn && f.el.checked) url.searchParams.set(f.param, f.value);
+            else url.searchParams.delete(f.param);
+          });
           cards[i].href = url.toString();
         }
       }
@@ -1422,7 +1505,10 @@
       curSel.addEventListener('change', apply);
       vendorSel.addEventListener('change', apply);
       walletInp.addEventListener('input', apply);
+      brandingInp.addEventListener('input', apply);
+      variantInp.addEventListener('input', apply);
       cheatMinesChk.addEventListener('change', apply);
+      GAME_FLAGS.forEach(function (f) { f.el.addEventListener('change', apply); });
 
       var brandReset = document.getElementById('brandReset');
       function resetToDefaultView() {
@@ -1432,12 +1518,17 @@
         themeSel.value = '';
         vendorSel.value = '';
         walletInp.value = '';
+        brandingInp.value = '';
+        variantInp.value = '';
         cheatMinesChk.checked = false;
+        GAME_FLAGS.forEach(function (f) { f.el.checked = false; localStorage.setItem(f.ls, '0'); });
         localStorage.setItem(LS_ADV, '0');
         localStorage.setItem(LS_SHOW_THEMES, '0');
         localStorage.setItem(LS_THEME_FILTER, '');
         localStorage.setItem(LS_VENDOR, '');
         localStorage.setItem(LS_WALLET, '');
+        localStorage.setItem(LS_BRANDING, '');
+        localStorage.setItem(LS_VARIANT, '');
         localStorage.setItem(LS_CHEAT_MINES, '0');
         syncDev();
         apply();
