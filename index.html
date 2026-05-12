@@ -163,6 +163,35 @@
       box-shadow: 0 0 0 3px rgba(0,172,203,0.22);
     }
     .toolbar input[type="text"]::placeholder { color: var(--muted); opacity: 0.7; }
+
+    .dev-bar {
+      margin-top: -0.5rem;
+      border-color: rgba(0,172,203,0.32);
+      background:
+        linear-gradient(180deg, rgba(0,172,203,0.07), rgba(0,172,203,0.02)),
+        var(--card);
+      position: relative;
+    }
+    @media (prefers-color-scheme: light) {
+      .dev-bar {
+        border-color: rgba(0,132,156,0.3);
+        background: linear-gradient(180deg, rgba(0,132,156,0.06), rgba(0,132,156,0.01)), var(--card);
+      }
+    }
+    .dev-bar-label {
+      position: absolute;
+      top: -0.65rem;
+      left: 0.85rem;
+      padding: 0 0.5rem;
+      background: var(--bg);
+      font-family: 'Kanit', system-ui, sans-serif;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .dev-bar .advanced-toggle { margin-left: 0; }
     .toolbar .hint {
       flex: 1;
       min-width: 100%;
@@ -825,35 +854,39 @@
         </optgroup>
       </select>
     </label>
-    <label class="dev-only">Vendor Integration
+    <label class="advanced-toggle">
+      <input type="checkbox" id="advToggle">
+      <span class="switch"></span>
+      <span class="lbl">Dev mode</span>
+    </label>
+  </div>
+
+  <div class="toolbar dev-bar dev-only">
+    <span class="dev-bar-label">Dev controls</span>
+    <label>Vendor Integration
       <select id="vendorSel">
         <option value="">None</option>
         <option value="Fusion">Fusion</option>
         <option value="EveryMatrix">EveryMatrix</option>
       </select>
     </label>
-    <label class="dev-only">Wallet Balance
+    <label>Wallet Balance
       <input type="text" id="walletInp" placeholder="e.g. 100" inputmode="decimal" autocomplete="off">
     </label>
-    <label class="advanced-toggle dev-only">
-      <input type="checkbox" id="cheatMinesChk">
-      <span class="switch"></span>
-      <span class="lbl">Always Win (Mines)</span>
-    </label>
-    <label class="dev-only">Theme filter
+    <label>Theme filter
       <select id="themeSel">
         <option value="">All themes</option>
       </select>
     </label>
-    <label class="advanced-toggle dev-only">
+    <label class="advanced-toggle">
+      <input type="checkbox" id="cheatMinesChk">
+      <span class="switch"></span>
+      <span class="lbl">Always Win (Mines)</span>
+    </label>
+    <label class="advanced-toggle">
       <input type="checkbox" id="showThemesToggle">
       <span class="switch"></span>
       <span class="lbl">Show themes</span>
-    </label>
-    <label class="advanced-toggle">
-      <input type="checkbox" id="advToggle">
-      <span class="switch"></span>
-      <span class="lbl">Dev mode</span>
     </label>
   </div>
 
@@ -901,7 +934,7 @@
 
     <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/burninator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/dragon-run.png')"></div>
-      <div class="meta">
+      <div class="meta" data-themes="Default_Dafabet">
         <div class="title">Dragon Run</div>
         <div class="tags"><span class="tag crash">Crash</span></div>
       </div>
@@ -949,7 +982,7 @@
 
     <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Chicken&GameCode=310&GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/chicken-runner.png')"></div>
-      <div class="meta" data-themes="Default,Default_Dafabet,Default_Worldcup">
+      <div class="meta" data-themes="Default_Dafabet,Default_Worldcup">
         <div class="title">Chicken Runner</div>
         <div class="tags"><span class="tag mines">Mines</span></div>
       </div>
@@ -957,7 +990,7 @@
 
     <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Frog&GameCode=311&GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/lucky-leap.png')"></div>
-      <div class="meta" data-themes="Frog">
+      <div class="meta">
         <div class="title">Lucky Leap</div>
         <div class="tags"><span class="tag mines">Mines</span></div>
       </div>
@@ -965,7 +998,7 @@
 
     <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Fish&GameCode=312&GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/unhooked.png')"></div>
-      <div class="meta" data-themes="Fish">
+      <div class="meta">
         <div class="title">Unhooked</div>
         <div class="tags"><span class="tag mines">Mines</span></div>
       </div>
