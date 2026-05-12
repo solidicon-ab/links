@@ -391,8 +391,9 @@
       box-shadow: 0 24px 60px rgba(0,0,0,0.55);
     }
     .player.viewport-portrait iframe {
-      width: min(400px, 90vw);
-      height: min(90vh, calc(min(400px, 90vw) * 16 / 9));
+      height: min(92vh, 980px);
+      width: auto;
+      max-width: 90vw;
       aspect-ratio: 9 / 16;
     }
     .player.viewport-landscape iframe {
@@ -1067,6 +1068,13 @@
       var toggleUiBtn   = document.getElementById('toggleUiBtn');
 
       advToggle.checked = localStorage.getItem(LS_ADV) === '1';
+      var showThemesToggle = document.getElementById('showThemesToggle');
+      var LS_SHOW_THEMES = 'solidicon-show-themes';
+      showThemesToggle.checked = localStorage.getItem(LS_SHOW_THEMES) === '1';
+      showThemesToggle.addEventListener('change', function () {
+        localStorage.setItem(LS_SHOW_THEMES, showThemesToggle.checked ? '1' : '0');
+        syncDev();
+      });
       var themeSel = document.getElementById('themeSel');
       var LS_THEME_FILTER = 'solidicon-theme-filter';
       function applyThemeFilter() {
@@ -1081,6 +1089,7 @@
       }
       function syncDev() {
         document.body.classList.toggle('dev-on', advToggle.checked);
+        document.body.classList.toggle('show-themes', advToggle.checked && showThemesToggle.checked);
         var on = advToggle.checked && player.classList.contains('open');
         playerActions.classList.toggle('show', on);
         playerLog.classList.toggle('show', on);
@@ -1216,7 +1225,8 @@
         themes.forEach(function (t) {
           var chip = document.createElement('span');
           chip.className = 'theme';
-          chip.textContent = t;
+          var parts = t.split('_');
+          chip.textContent = parts[parts.length - 1];
           chip.title = t;
           row.appendChild(chip);
         });
@@ -1237,10 +1247,18 @@
           if (t) allThemes.add(t);
         });
       });
-      Array.from(allThemes).sort().forEach(function (t) {
+      var allThemesArr = Array.from(allThemes).sort();
+      var lastSegCounts = {};
+      allThemesArr.forEach(function (t) {
+        var last = t.split('_').pop();
+        lastSegCounts[last] = (lastSegCounts[last] || 0) + 1;
+      });
+      allThemesArr.forEach(function (t) {
         var opt = document.createElement('option');
         opt.value = t;
-        opt.textContent = t;
+        var parts = t.split('_');
+        var last = parts[parts.length - 1];
+        opt.textContent = (lastSegCounts[last] > 1 && parts.length > 1) ? (last + ' (' + t + ')') : last;
         themeSel.appendChild(opt);
       });
       var savedThemeFilter = localStorage.getItem(LS_THEME_FILTER) || '';
