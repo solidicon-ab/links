@@ -157,6 +157,24 @@
     .tag.mines       { color: #6bd28a; border-color: rgba(107,210,138,0.45); }
     .tag.slot        { color: #b18cff; border-color: rgba(177,140,255,0.45); }
     .tag.soon        { color: #7aa2ff; border-color: rgba(122,162,255,0.45); }
+
+    .flag {
+      position: absolute;
+      top: 0.4rem;
+      right: 0.4rem;
+      width: 1.6rem;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.25);
+      z-index: 1;
+      pointer-events: none;
+    }
+    @media (min-width: 600px) {
+      .flag { width: 2rem; top: 0.5rem; right: 0.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -342,6 +360,28 @@
       var langSel = document.getElementById('langSel');
       var curSel  = document.getElementById('curSel');
 
+      var langToCountry = {
+        'en':   'gb',
+        'fr':   'fr',
+        'pt':   'pt',
+        'pt-br':'br',
+        'es-mx':'mx',
+        'ru':   'ru',
+        'el':   'gr',
+        'ja':   'jp'
+      };
+
+      var cards = document.querySelectorAll('a.card[data-base]');
+      var flags = [];
+      cards.forEach(function (card) {
+        var img = document.createElement('img');
+        img.className = 'flag';
+        img.alt = '';
+        img.decoding = 'async';
+        card.appendChild(img);
+        flags.push(img);
+      });
+
       var savedLang = localStorage.getItem(LS_LANG);
       var savedCur  = localStorage.getItem(LS_CUR);
       if (savedLang) langSel.value = savedLang;
@@ -352,12 +392,17 @@
         var cur  = curSel.value;
         localStorage.setItem(LS_LANG, lang);
         localStorage.setItem(LS_CUR, cur);
-        var cards = document.querySelectorAll('a.card[data-base]');
+        var country = langToCountry[lang] || 'un';
+        var flagSrc = 'https://flagcdn.com/' + country + '.svg';
         for (var i = 0; i < cards.length; i++) {
           var url = new URL(cards[i].dataset.base);
           url.searchParams.set('Lang', lang);
           url.searchParams.set('FakeCultureCode', cur);
           cards[i].href = url.toString();
+        }
+        for (var j = 0; j < flags.length; j++) {
+          flags[j].src = flagSrc;
+          flags[j].alt = lang;
         }
       }
 
