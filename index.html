@@ -865,7 +865,7 @@
     <span class="dev-bar-label">Dev controls</span>
     <label>Vendor Integration
       <select id="vendorSel">
-        <option value="">None</option>
+        <option value="">Default</option>
         <option value="Fusion">Fusion</option>
         <option value="EveryMatrix">EveryMatrix</option>
       </select>
@@ -1332,6 +1332,7 @@
       themeSel.addEventListener('change', function () {
         localStorage.setItem(LS_THEME_FILTER, themeSel.value);
         applyThemeFilter();
+        apply();
       });
 
       function apply() {
@@ -1341,6 +1342,7 @@
         var vendor = devOn ? vendorSel.value : '';
         var wallet = devOn ? walletInp.value.trim() : '';
         var cheatMines = devOn && cheatMinesChk.checked;
+        var theme  = devOn ? themeSel.value : '';
         localStorage.setItem(LS_LANG, lang);
         localStorage.setItem(LS_CUR, cur);
         localStorage.setItem(LS_VENDOR, vendorSel.value);
@@ -1354,6 +1356,8 @@
           else url.searchParams.delete('ExternalVendorIntegration');
           if (wallet) url.searchParams.set('FakeWalletBalance', wallet);
           else url.searchParams.delete('FakeWalletBalance');
+          if (theme && theme !== 'Default') url.searchParams.set('Branding', theme);
+          else url.searchParams.delete('Branding');
           var isMines = cards[i].querySelector('.tag.mines') !== null;
           if (isMines) {
             if (cheatMines) url.searchParams.set('dbgmockhelios', 'true');
