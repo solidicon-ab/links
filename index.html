@@ -33,8 +33,18 @@
       max-width: 1280px;
       margin: 0 auto;
     }
-    header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.6rem; gap: 1rem; flex-wrap: wrap; }
-    h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; gap: 1rem; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 0.7rem; }
+    .brand .logotype {
+      height: 1.9rem;
+      width: auto;
+      display: block;
+    }
+    .brand .logotype.for-light { display: none; }
+    @media (prefers-color-scheme: light) {
+      .brand .logotype.for-dark  { display: none; }
+      .brand .logotype.for-light { display: block; }
+    }
     .sub { color: var(--muted); font-size: 0.85rem; }
 
     .toolbar {
@@ -121,7 +131,18 @@
         linear-gradient(135deg, rgba(122,162,255,0.06), rgba(177,140,255,0.06)),
         var(--card);
     }
-    .thumb.placeholder svg { opacity: 0.7; filter: drop-shadow(0 0 14px rgba(122,162,255,0.35)); }
+    .thumb.placeholder .ph-logo {
+      width: 32%;
+      max-width: 90px;
+      height: auto;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 14px rgba(122,162,255,0.4));
+    }
+    .thumb.placeholder .ph-logo.for-light { display: none; }
+    @media (prefers-color-scheme: light) {
+      .thumb.placeholder .ph-logo.for-dark  { display: none; }
+      .thumb.placeholder .ph-logo.for-light { display: block; }
+    }
     .thumb.placeholder .ph-text {
       font-size: 0.72rem;
       font-weight: 700;
@@ -179,21 +200,24 @@
 </head>
 <body>
   <header>
-    <h1>Solidicon games</h1>
-    <span class="sub">Test links</span>
+    <div class="brand">
+      <img class="logotype for-dark"  src="images/logotype-white.png" alt="Solidicon">
+      <img class="logotype for-light" src="images/logotype-black.png" alt="Solidicon">
+    </div>
+    <span class="sub">Game test links</span>
   </header>
 
   <div class="toolbar">
     <label>Language
       <select id="langSel">
-        <option value="en">en — English</option>
-        <option value="fr">fr — French</option>
-        <option value="pt">pt — Portuguese</option>
-        <option value="pt-br">pt-br — Brazilian Portuguese</option>
-        <option value="es-mx">es-mx — Mexican Spanish</option>
-        <option value="ru">ru — Russian</option>
-        <option value="el">el — Greek</option>
-        <option value="ja">ja — Japanese (slots only)</option>
+        <option value="en">English</option>
+        <option value="fr">French</option>
+        <option value="pt">Portuguese</option>
+        <option value="pt-br">Brazilian Portuguese</option>
+        <option value="es-mx">Mexican Spanish</option>
+        <option value="ru">Russian</option>
+        <option value="el">Greek</option>
+        <option value="ja">Japanese (slots only)</option>
       </select>
     </label>
     <label>Currency
@@ -325,10 +349,8 @@
 
     <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/DragonRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test&DbgMockHelios=true">
       <div class="thumb placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="34" height="34" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 7v5l3 2"/>
-        </svg>
+        <img class="ph-logo for-dark"  src="images/logo-white.png" alt="" aria-hidden="true">
+        <img class="ph-logo for-light" src="images/logo-black.png" alt="" aria-hidden="true">
         <div class="ph-text">Coming Soon</div>
       </div>
       <div class="meta">
@@ -339,10 +361,8 @@
 
     <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/ninjaCatSlot/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="34" height="34" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 7v5l3 2"/>
-        </svg>
+        <img class="ph-logo for-dark"  src="images/logo-white.png" alt="" aria-hidden="true">
+        <img class="ph-logo for-light" src="images/logo-black.png" alt="" aria-hidden="true">
         <div class="ph-text">Coming Soon</div>
       </div>
       <div class="meta">
