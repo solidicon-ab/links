@@ -5,68 +5,234 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Solidicon game test links</title>
   <style>
-    :root { color-scheme: light dark; }
-    body { font-family: system-ui, -apple-system, sans-serif; max-width: 720px; margin: 1.5rem auto; padding: 0 1rem 4rem; }
-    h1 { font-size: 1.3rem; margin-bottom: 1rem; }
-    h2 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6; margin-top: 1.5rem; }
-    ul { list-style: none; padding: 0; margin: 0; }
-    li { margin: 0.5rem 0; }
-    a.card {
+    :root {
+      color-scheme: light dark;
+      --bg: #0e0f12;
+      --fg: #e8eaed;
+      --muted: #9aa0a6;
+      --card: #16181d;
+      --border: rgba(255,255,255,0.08);
+      --accent: #7aa2ff;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f7f7f8;
+        --fg: #1a1a1a;
+        --muted: #5f6368;
+        --card: #ffffff;
+        --border: rgba(0,0,0,0.08);
+        --accent: #2b59d6;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding: 1.25rem 1rem 4rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; flex-wrap: wrap; }
+    h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+    .sub { color: var(--muted); font-size: 0.85rem; }
+
+    .grid {
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+
+    .card {
       display: block;
-      padding: 0.9rem 1rem;
-      border: 1px solid rgba(128,128,128,0.3);
-      border-radius: 10px;
       text-decoration: none;
       color: inherit;
-      font-weight: 500;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.12s ease, border-color 0.12s ease;
+      position: relative;
     }
-    a.card:active { background: rgba(128,128,128,0.15); }
-    a.card .tag { font-size: 0.7rem; font-weight: 400; opacity: 0.6; margin-left: 0.4rem; }
-    li.discontinued a.card { opacity: 0.4; pointer-events: none; }
-    li.todo a.card { opacity: 0.5; border-style: dashed; }
+    .card:active { transform: scale(0.98); }
+    @media (hover: hover) {
+      .card:hover { border-color: var(--accent); }
+    }
+
+    .thumb {
+      aspect-ratio: 725 / 460;
+      background: #000 center/cover no-repeat;
+      display: block;
+    }
+    .thumb.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0 10px, transparent 10px 20px), var(--card);
+    }
+
+    .meta { padding: 0.7rem 0.85rem 0.85rem; }
+    .title { font-weight: 600; font-size: 0.95rem; line-height: 1.25; }
+    .tag {
+      display: inline-block;
+      margin-top: 0.35rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+      padding: 0.1rem 0.45rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+    .tag.warn { color: #e0a64a; border-color: rgba(224,166,74,0.4); }
+    .tag.dead { color: #e06b6b; border-color: rgba(224,107,107,0.4); }
+
+    .card.disabled { opacity: 0.45; pointer-events: none; }
+    .card.todo { border-style: dashed; }
   </style>
 </head>
 <body>
-  <h1>Solidicon games</h1>
+  <header>
+    <h1>Solidicon games</h1>
+    <span class="sub">Test links</span>
+  </header>
 
-  <ul>
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/ninjaCatSlot/index.html">Ninja Slot</a></li>
+  <div class="grid">
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/penalty/index.html">Penalty from the Streets</a></li>
+    <a class="card todo" href="#" aria-disabled="true">
+      <div class="thumb placeholder">no thumbnail</div>
+      <div class="meta">
+        <div class="title">Ninja Slot</div>
+        <span class="tag warn">no image</span>
+      </div>
+    </a>
 
-    <li class="todo"><a class="card" href="#">Navigator <span class="tag">URL?</span></a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/penalty/index.html">
+      <div class="thumb" style="background-image:url('images/penalty.png')"></div>
+      <div class="meta"><div class="title">Penalty from the Streets</div></div>
+    </a>
 
-    <li class="todo"><a class="card" href="#">Swiminator <span class="tag">URL?</span></a></li>
+    <a class="card todo" href="#" aria-disabled="true">
+      <div class="thumb" style="background-image:url('images/navigator.png')"></div>
+      <div class="meta">
+        <div class="title">Navigator</div>
+        <span class="tag warn">URL missing</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/navigatorExtreme/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">Swiminator Extreme <span class="tag">verify: path is navigatorExtreme</span></a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/navigatorExtreme/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+      <div class="thumb" style="background-image:url('images/swiminator.png')"></div>
+      <div class="meta">
+        <div class="title">Swiminator</div>
+        <span class="tag warn">verify URL</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/angler/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">Fishinator</a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/navigatorExtreme/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+      <div class="thumb" style="background-image:url('images/swiminator.png')"></div>
+      <div class="meta">
+        <div class="title">Swiminator Extreme</div>
+        <span class="tag warn">verify: path=navigatorExtreme</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/boxinator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">Punchinator</a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/angler/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+      <div class="thumb" style="background-image:url('images/fishinator.png')"></div>
+      <div class="meta"><div class="title">Fishinator</div></div>
+    </a>
 
-    <li class="discontinued"><a class="card" href="#">Supershoot (Single Player) <span class="tag">discontinued Dec 2025</span></a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/boxinator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+      <div class="thumb" style="background-image:url('images/punchinator.png')"></div>
+      <div class="meta"><div class="title">Punchinator</div></div>
+    </a>
 
-    <li class="todo"><a class="card" href="#">Supershoot Crash <span class="tag">URL?</span></a></li>
+    <a class="card disabled" href="#" aria-disabled="true">
+      <div class="thumb" style="background-image:url('images/supershoot.png')"></div>
+      <div class="meta">
+        <div class="title">Supershoot (Single Player)</div>
+        <span class="tag dead">discontinued Dec 2025</span>
+      </div>
+    </a>
 
-    <li class="todo"><a class="card" href="#">Navigator Mini <span class="tag">URL?</span></a></li>
+    <a class="card todo" href="#" aria-disabled="true">
+      <div class="thumb" style="background-image:url('images/supershoot-crash.png')"></div>
+      <div class="meta">
+        <div class="title">Supershoot Crash</div>
+        <span class="tag warn">URL missing</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/burninator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">Dragon Run <span class="tag">guess: burninator</span></a></li>
+    <a class="card todo" href="#" aria-disabled="true">
+      <div class="thumb" style="background-image:url('images/navigator.png')"></div>
+      <div class="meta">
+        <div class="title">Navigator Mini</div>
+        <span class="tag warn">URL missing</span>
+      </div>
+    </a>
 
-    <li class="todo"><a class="card" href="#">Quackinator <span class="tag">URL?</span></a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/burninator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+      <div class="thumb" style="background-image:url('images/dragon-run.png')"></div>
+      <div class="meta">
+        <div class="title">Dragon Run</div>
+        <span class="tag warn">guess: burninator</span>
+      </div>
+    </a>
 
-    <li class="todo"><a class="card" href="#">Ngannou Punchinator <span class="tag">URL?</span></a></li>
+    <a class="card todo" href="#" aria-disabled="true">
+      <div class="thumb" style="background-image:url('images/quackinator.png')"></div>
+      <div class="meta">
+        <div class="title">Quackinator</div>
+        <span class="tag warn">URL missing</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/HorseRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">Ascot Gold <span class="tag">URL was truncated — reconstructed</span></a></li>
+    <a class="card todo" href="#" aria-disabled="true">
+      <div class="thumb" style="background-image:url('images/punchinator.png')"></div>
+      <div class="meta">
+        <div class="title">Ngannou Punchinator</div>
+        <span class="tag warn">URL missing</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/CarRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">Rushinator <span class="tag">guess + reconstructed URL</span></a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/HorseRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+      <div class="thumb" style="background-image:url('images/ascot-gold.png')"></div>
+      <div class="meta">
+        <div class="title">Ascot Gold</div>
+        <span class="tag warn">URL reconstructed</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/DragonRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur&DbgMockHelios=true">Dragon Racing Crash <span class="tag">URL was truncated — reconstructed</span></a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/CarRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+      <div class="thumb" style="background-image:url('images/rushinator.png')"></div>
+      <div class="meta">
+        <div class="title">Rushinator</div>
+        <span class="tag warn">guess + URL reconstructed</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Chicken&GameCode=310">Chicken Runner</a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/DragonRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur&DbgMockHelios=true">
+      <div class="thumb" style="background-image:url('images/blank.png')"></div>
+      <div class="meta">
+        <div class="title">Dragon Racing Crash</div>
+        <span class="tag warn">URL reconstructed</span>
+      </div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Frog&GameCode=311">Lucky Leap</a></li>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Chicken&GameCode=310">
+      <div class="thumb" style="background-image:url('images/chicken-runner.png')"></div>
+      <div class="meta"><div class="title">Chicken Runner</div></div>
+    </a>
 
-    <li><a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Fish&GameCode=312">Unhooked</a></li>
-  </ul>
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Frog&GameCode=311">
+      <div class="thumb" style="background-image:url('images/lucky-leap.png')"></div>
+      <div class="meta"><div class="title">Lucky Leap</div></div>
+    </a>
+
+    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Fish&GameCode=312">
+      <div class="thumb" style="background-image:url('images/unhooked.png')"></div>
+      <div class="meta"><div class="title">Unhooked</div></div>
+    </a>
+
+  </div>
 </body>
 </html>
