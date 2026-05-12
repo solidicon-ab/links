@@ -705,7 +705,7 @@
   </header>
 
   <div class="toolbar">
-    <label title="URL param: Lang. Sets the game's initial UI language.">Launch Language
+    <label data-tip="URL param: Lang. Sets the game's initial UI language.">Launch Language
       <select id="langSel">
         <option value="en">🇬🇧 English</option>
         <option value="fr">🇫🇷 French</option>
@@ -716,7 +716,7 @@
         <option value="el">🇬🇷 Greek</option>
       </select>
     </label>
-    <label title="URL param: FakeCultureCode. Requires FakeMode=test (already on every URL). Sets the wallet currency and formatting.">Currency
+    <label data-tip="URL param: FakeCultureCode. Requires FakeMode=test (already on every URL). Sets the wallet currency and formatting.">Currency
       <select id="curSel">
         <optgroup label="Featured">
           <option value="usd">usd — US Dollar</option>
@@ -880,7 +880,7 @@
         </optgroup>
       </select>
     </label>
-    <label class="advanced-toggle" title="Reveals Dev controls and Game flags rows, plus an in-player postMessage panel and the game→host log.">
+    <label class="advanced-toggle" data-tip="Reveals Dev controls and Game flags rows, plus an in-player postMessage panel and the game→host log." data-tip-always="1">
       <input type="checkbox" id="advToggle">
       <span class="switch"></span>
       <span class="lbl">Dev mode</span>
@@ -889,33 +889,33 @@
 
   <div class="toolbar dev-bar dev-only">
     <span class="dev-bar-label">Dev controls</span>
-    <label title="URL param: ExternalVendorIntegration. Fusion makes the game post a quit event when the home button is pressed; EveryMatrix makes it listen for stopAutoplay messages from the host.">Vendor Integration
+    <label data-tip="URL param: ExternalVendorIntegration. Fusion makes the game post a quit event when the home button is pressed; EveryMatrix makes it listen for stopAutoplay messages from the host.">Vendor Integration
       <select id="vendorSel">
         <option value="">Default</option>
         <option value="Fusion">Fusion</option>
         <option value="EveryMatrix">EveryMatrix</option>
       </select>
     </label>
-    <label title="URL param: FakeWalletBalance. Starting fake-wallet amount, in major units of the selected currency. Requires FakeMode=test (already on every URL).">Wallet Balance
+    <label data-tip="URL param: FakeWalletBalance. Starting fake-wallet amount, in major units of the selected currency. Requires FakeMode=test (already on every URL).">Wallet Balance
       <input type="text" id="walletInp" placeholder="e.g. 100" inputmode="decimal" autocomplete="off">
     </label>
-    <label title="Filters cards to ones supporting the chosen theme AND adds Branding=&lt;theme&gt; to every launch URL so the game opens in that operator skin.">Theme filter
+    <label data-tip="Filters cards to ones supporting the chosen theme AND adds Branding=<theme> to every launch URL so the game opens in that operator skin.">Theme filter
       <select id="themeSel">
         <option value="">All themes</option>
       </select>
     </label>
-    <label title="URL param: Branding. Manual override — wins over the Theme filter mapping. Use exact backend value (e.g. ElephantBet, Dafabet, OneXBet, Melbet, Worldcup).">Branding override
+    <label data-tip="URL param: Branding. Manual override — wins over the Theme filter mapping. Use exact backend value (e.g. ElephantBet, Dafabet, OneXBet, Melbet, Worldcup).">Branding override
       <input type="text" id="brandingInp" placeholder="e.g. worldcup" autocomplete="off" spellcheck="false">
     </label>
-    <label title="URL param: GameVariant. Maps to ThemeVariant in the game settings (e.g. Chicken / Frog / Fish for Mines, Ngannou for Punchinator).">GameVariant override
+    <label data-tip="URL param: GameVariant. Maps to ThemeVariant in the game settings (e.g. Chicken / Frog / Fish for Mines, Ngannou for Punchinator).">GameVariant override
       <input type="text" id="variantInp" placeholder="e.g. Chicken" autocomplete="off" spellcheck="false">
     </label>
-    <label class="advanced-toggle" title="Adds dbgmockhelios=true to Mines cards only (Chicken Runner / Lucky Leap / Unhooked). With the mocked backend you can step through outcomes — typically used to test the always-win / max-win path.">
+    <label class="advanced-toggle" data-tip="Adds dbgmockhelios=true to Mines cards only (Chicken Runner / Lucky Leap / Unhooked). With the mocked backend you can step through outcomes — typically used to test the always-win / max-win path.">
       <input type="checkbox" id="cheatMinesChk">
       <span class="switch"></span>
       <span class="lbl">Always Win (Mines)</span>
     </label>
-    <label class="advanced-toggle" title="Renders the supported-theme chips under each card so you can see which operator skins each game ships.">
+    <label class="advanced-toggle" data-tip="Renders the supported-theme chips under each card so you can see which operator skins each game ships.">
       <input type="checkbox" id="showThemesToggle">
       <span class="switch"></span>
       <span class="lbl">Show themes</span>
@@ -924,37 +924,37 @@
 
   <div class="toolbar dev-bar dev-only">
     <span class="dev-bar-label">Game flags</span>
-    <label class="advanced-toggle" title="URL param: NavigateToOnExit=_about:blank. The game's burger menu only shows the home/back icon when this is set — so this toggle reveals it without breaking out of the iframe overlay (game just navigates the iframe to about:blank on exit).">
+    <label class="advanced-toggle" data-tip="URL param: NavigateToOnExit=_about:blank. The game's burger menu only shows the home/back icon when this is set — so this toggle reveals it without breaking out of the iframe overlay (game just navigates the iframe to about:blank on exit).">
       <input type="checkbox" id="flagHome">
       <span class="switch"></span>
       <span class="lbl">Show home button</span>
     </label>
-    <label class="advanced-toggle" title="URL param: Mute=true. The audio engine is not initialized at all (not just silenced). Useful for testing audio-init edge cases or for running games without sound.">
+    <label class="advanced-toggle" data-tip="URL param: Mute=true. The audio engine is not initialized at all (not just silenced). Useful for testing audio-init edge cases or for running games without sound.">
       <input type="checkbox" id="flagMute">
       <span class="switch"></span>
       <span class="lbl">Mute audio</span>
     </label>
-    <label class="advanced-toggle" title="URL param: EnableChat=false. Removes the chat icon and functionality from the footer panel. Default is enabled.">
+    <label class="advanced-toggle" data-tip="URL param: EnableChat=false. Removes the chat icon and functionality from the footer panel. Default is enabled.">
       <input type="checkbox" id="flagHideChat">
       <span class="switch"></span>
       <span class="lbl">Hide chat</span>
     </label>
-    <label class="advanced-toggle" title="URL param: DbgEnableHowToPlayPopup=true. Debug-only: forces the how-to-play popup on, overriding whatever the server says. Currently only used for the Brazil region by default.">
+    <label class="advanced-toggle" data-tip="URL param: DbgEnableHowToPlayPopup=true. Debug-only: forces the how-to-play popup on, overriding whatever the server says. Currently only used for the Brazil region by default.">
       <input type="checkbox" id="flagHowToPlay">
       <span class="switch"></span>
       <span class="lbl">Force how-to-play</span>
     </label>
-    <label class="advanced-toggle" title="URL param: EnableFreeBetsRedemption=true. Adds the redeem-code / free-flights icon to the burger menu so you can open the redeem panel.">
+    <label class="advanced-toggle" data-tip="URL param: EnableFreeBetsRedemption=true. Adds the redeem-code / free-flights icon to the burger menu so you can open the redeem panel.">
       <input type="checkbox" id="flagRedeem">
       <span class="switch"></span>
       <span class="lbl">Redeem code panel</span>
     </label>
-    <label class="advanced-toggle" title="URL param: FpsMeter=true. Shows the on-screen FPS counter. There's also a keyboard shortcut for this inside the game (FpsKeyboard is on by default).">
+    <label class="advanced-toggle" data-tip="URL param: FpsMeter=true. Shows the on-screen FPS counter. There's also a keyboard shortcut for this inside the game (FpsKeyboard is on by default).">
       <input type="checkbox" id="flagFps">
       <span class="switch"></span>
       <span class="lbl">FPS meter</span>
     </label>
-    <label class="advanced-toggle" title="URL param: DbgMockHelios=true. Uses the mocked offline Helios backend for the whole game (not just Mines). Debug builds only, and only some games implement it (e.g. Quackinator).">
+    <label class="advanced-toggle" data-tip="URL param: DbgMockHelios=true. Uses the mocked offline Helios backend for the whole game (not just Mines). Debug builds only, and only some games implement it (e.g. Quackinator).">
       <input type="checkbox" id="flagMockHelios">
       <span class="switch"></span>
       <span class="lbl">Mock backend</span>
@@ -1258,6 +1258,10 @@
         playerActions.classList.toggle('show', on);
         playerLog.classList.toggle('show', on);
         applyThemeFilter();
+        document.querySelectorAll('[data-tip]').forEach(function (el) {
+          if (advToggle.checked || el.dataset.tipAlways === '1') el.title = el.dataset.tip;
+          else el.removeAttribute('title');
+        });
       }
       var syncActionsVisibility = syncDev;
       function resetDevControls() {
