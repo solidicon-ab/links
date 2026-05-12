@@ -1175,6 +1175,7 @@
         player.classList.add('open');
         player.setAttribute('aria-hidden', 'false');
         document.body.classList.add('player-open');
+        setViewport(advToggle.checked ? 'portrait' : 'desktop');
         syncActionsVisibility();
       }
       function closePlayer() {
