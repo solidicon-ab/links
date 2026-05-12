@@ -196,6 +196,34 @@
     @media (min-width: 600px) {
       .flag { width: 2rem; top: 0.5rem; right: 0.5rem; }
     }
+
+    .lang-flags {
+      display: flex;
+      gap: 3px;
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .lang-flag {
+      width: 14px;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      border-radius: 2px;
+      opacity: 0.35;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+      transition: opacity 0.15s, transform 0.15s, outline-color 0.15s;
+      outline: 1.5px solid transparent;
+      outline-offset: 1px;
+    }
+    .lang-flag.active {
+      opacity: 1;
+      outline-color: var(--accent);
+      transform: scale(1.06);
+    }
+    @media (min-width: 600px) {
+      .lang-flag { width: 16px; }
+      .lang-flags { gap: 4px; }
+    }
   </style>
 </head>
 <body>
@@ -365,7 +393,7 @@
         <img class="ph-logo for-light" src="images/logo-black.png" alt="" aria-hidden="true">
         <div class="ph-text">Coming Soon</div>
       </div>
-      <div class="meta">
+      <div class="meta" data-langs="en,fr,pt,pt-br,es-mx,ru,el,ja">
         <div class="title">Katsurus Gold</div>
         <div class="tags"><span class="tag slot">Slot</span><span class="tag soon">Coming Soon</span></div>
       </div>
@@ -391,15 +419,38 @@
         'ja':   'jp'
       };
 
+      var DEFAULT_LANGS = 'en,fr,pt,pt-br,es-mx,ru,el';
+
+      function flagSrc(code) {
+        return 'https://flagcdn.com/' + (langToCountry[code] || 'un') + '.svg';
+      }
+
       var cards = document.querySelectorAll('a.card[data-base]');
       var flags = [];
+      var langFlags = [];
       cards.forEach(function (card) {
-        var img = document.createElement('img');
-        img.className = 'flag';
-        img.alt = '';
-        img.decoding = 'async';
-        card.appendChild(img);
-        flags.push(img);
+        var corner = document.createElement('img');
+        corner.className = 'flag';
+        corner.alt = '';
+        corner.decoding = 'async';
+        card.appendChild(corner);
+        flags.push(corner);
+
+        var meta = card.querySelector('.meta');
+        var supported = (meta.dataset.langs || DEFAULT_LANGS).split(',');
+        var row = document.createElement('div');
+        row.className = 'lang-flags';
+        supported.forEach(function (l) {
+          var img = document.createElement('img');
+          img.className = 'lang-flag';
+          img.dataset.lang = l;
+          img.alt = l;
+          img.decoding = 'async';
+          img.src = flagSrc(l);
+          row.appendChild(img);
+          langFlags.push(img);
+        });
+        meta.appendChild(row);
       });
 
       var savedLang = localStorage.getItem(LS_LANG);
@@ -412,8 +463,7 @@
         var cur  = curSel.value;
         localStorage.setItem(LS_LANG, lang);
         localStorage.setItem(LS_CUR, cur);
-        var country = langToCountry[lang] || 'un';
-        var flagSrc = 'https://flagcdn.com/' + country + '.svg';
+        var cornerSrc = flagSrc(lang);
         for (var i = 0; i < cards.length; i++) {
           var url = new URL(cards[i].dataset.base);
           url.searchParams.set('Lang', lang);
@@ -421,8 +471,12 @@
           cards[i].href = url.toString();
         }
         for (var j = 0; j < flags.length; j++) {
-          flags[j].src = flagSrc;
+          flags[j].src = cornerSrc;
           flags[j].alt = lang;
+        }
+        for (var k = 0; k < langFlags.length; k++) {
+          if (langFlags[k].dataset.lang === lang) langFlags[k].classList.add('active');
+          else langFlags[k].classList.remove('active');
         }
       }
 
