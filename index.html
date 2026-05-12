@@ -582,9 +582,9 @@
       color: var(--accent-bright);
       box-shadow: 0 0 0 3px rgba(0,214,252,0.32);
     }
-    .pa-row { display: flex; gap: 0.3rem; align-items: stretch; }
-    .pa-row select { flex: 1; border-radius: 8px; text-transform: none; letter-spacing: 0; font-size: 0.7rem; padding: 0.4rem 0.55rem; }
-    .pa-row button { border-radius: 8px; }
+    .pa-row { display: flex; flex-direction: column; gap: 0.3rem; }
+    .pa-row select { width: 100%; min-width: 0; border-radius: 8px; text-transform: none; letter-spacing: 0; font-size: 0.7rem; padding: 0.4rem 0.55rem; }
+    .pa-row button { width: 100%; border-radius: 8px; text-align: center; }
 
     .player-log {
       position: fixed;
@@ -1336,6 +1336,15 @@
         apply();
       });
 
+      var THEME_TO_BRANDING = {
+        'dafabet':     'dafabet',
+        'worldcup':    'worldcup',
+        'afcon':       'afcon',
+        'onexbet':     'onexbet',
+        'melbet':      'melbet',
+        'elephantbet': 'elephant-bet',
+        'christmas':   'christmas'
+      };
       function apply() {
         var lang   = langSel.value;
         var cur    = curSel.value;
@@ -1344,6 +1353,7 @@
         var wallet = devOn ? walletInp.value.trim() : '';
         var cheatMines = devOn && cheatMinesChk.checked;
         var theme  = devOn ? themeSel.value : '';
+        var brand  = theme ? THEME_TO_BRANDING[theme.toLowerCase()] : '';
         localStorage.setItem(LS_LANG, lang);
         localStorage.setItem(LS_CUR, cur);
         localStorage.setItem(LS_VENDOR, vendorSel.value);
@@ -1357,8 +1367,10 @@
           else url.searchParams.delete('ExternalVendorIntegration');
           if (wallet) url.searchParams.set('FakeWalletBalance', wallet);
           else url.searchParams.delete('FakeWalletBalance');
-          if (theme && theme !== 'Default') url.searchParams.set('Branding', theme);
-          else url.searchParams.delete('Branding');
+          if (brand) {
+            url.searchParams.set('Branding', brand);
+            if (url.searchParams.get('GameVariant') === 'Chicken') url.searchParams.delete('GameVariant');
+          } else url.searchParams.delete('Branding');
           var isMines = cards[i].querySelector('.tag.mines') !== null;
           if (isMines) {
             if (cheatMines) url.searchParams.set('dbgmockhelios', 'true');
