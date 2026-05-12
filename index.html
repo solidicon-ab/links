@@ -339,17 +339,11 @@
 
     .advanced-toggle {
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.3rem;
+      align-items: center;
+      gap: 0.55rem;
       margin-left: auto;
       cursor: pointer;
       user-select: none;
-    }
-    .advanced-toggle .row {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
       font-family: 'Kanit', system-ui, sans-serif;
       font-size: 0.68rem;
       font-weight: 500;
@@ -357,37 +351,13 @@
       text-transform: uppercase;
       letter-spacing: 0.16em;
     }
-    .advanced-toggle .adv-hint {
-      font-family: 'Bai Jamjuree', system-ui, sans-serif;
-      font-size: 0.7rem;
-      font-weight: 400;
-      color: var(--muted);
-      max-width: 19rem;
-      text-align: right;
-      line-height: 1.35;
-      text-transform: none;
-      letter-spacing: 0;
-      opacity: 0.85;
-    }
-    .advanced-toggle .adv-hint code {
-      font-family: 'Fragment Mono', ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 0.68rem;
-      background: rgba(0,172,203,0.12);
-      color: var(--accent-bright);
-      padding: 0.02rem 0.32rem;
-      border-radius: 4px;
-    }
-    @media (prefers-color-scheme: light) {
-      .advanced-toggle .adv-hint code { color: var(--accent); background: rgba(0,132,156,0.1); }
-    }
     @media (max-width: 599px) {
-      .advanced-toggle {
-        align-items: flex-start;
-        margin-left: 0;
-      }
-      .advanced-toggle .adv-hint { text-align: left; }
+      .advanced-toggle { margin-left: 0; }
     }
     .advanced-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+
+    .dev-only { display: none !important; }
+    body.dev-on .dev-only { display: flex !important; }
     .advanced-toggle .switch {
       position: relative;
       width: 2.4rem;
@@ -767,7 +737,7 @@
         </optgroup>
       </select>
     </label>
-    <label>Vendor Integration
+    <label class="dev-only">Vendor Integration
       <select id="vendorSel">
         <option value="">None</option>
         <option value="Fusion">Fusion</option>
@@ -775,12 +745,9 @@
       </select>
     </label>
     <label class="advanced-toggle">
-      <span class="row">
-        <input type="checkbox" id="advToggle">
-        <span class="switch"></span>
-        <span class="lbl">Advanced</span>
-      </span>
-      <span class="adv-hint">Reveals in-player controls and a <code>postMessage</code> log of events the game sends back to the host.</span>
+      <input type="checkbox" id="advToggle">
+      <span class="switch"></span>
+      <span class="lbl">Dev mode</span>
     </label>
   </div>
 
@@ -1004,14 +971,17 @@
       var forceErrorBtn = document.getElementById('forceErrorBtn');
 
       advToggle.checked = localStorage.getItem(LS_ADV) === '1';
-      function syncActionsVisibility() {
+      function syncDev() {
+        document.body.classList.toggle('dev-on', advToggle.checked);
         var on = advToggle.checked && player.classList.contains('open');
         playerActions.classList.toggle('show', on);
         playerLog.classList.toggle('show', on);
       }
+      var syncActionsVisibility = syncDev;
       advToggle.addEventListener('change', function () {
         localStorage.setItem(LS_ADV, advToggle.checked ? '1' : '0');
-        syncActionsVisibility();
+        syncDev();
+        apply();
       });
 
       function openPlayer(url) {
@@ -1107,10 +1077,10 @@
       function apply() {
         var lang   = langSel.value;
         var cur    = curSel.value;
-        var vendor = vendorSel.value;
+        var vendor = advToggle.checked ? vendorSel.value : '';
         localStorage.setItem(LS_LANG, lang);
         localStorage.setItem(LS_CUR, cur);
-        localStorage.setItem(LS_VENDOR, vendor);
+        localStorage.setItem(LS_VENDOR, vendorSel.value);
         for (var i = 0; i < cards.length; i++) {
           var url = new URL(cards[i].dataset.base);
           url.searchParams.set('Lang', lang);
@@ -1124,6 +1094,7 @@
       langSel.addEventListener('change', apply);
       curSel.addEventListener('change', apply);
       vendorSel.addEventListener('change', apply);
+      syncDev();
       apply();
     })();
   </script>
