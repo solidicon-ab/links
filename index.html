@@ -33,9 +33,51 @@
       max-width: 1280px;
       margin: 0 auto;
     }
-    header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; flex-wrap: wrap; }
+    header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.6rem; gap: 1rem; flex-wrap: wrap; }
     h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
     .sub { color: var(--muted); font-size: 0.85rem; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      padding: 0.7rem 0.85rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+    .toolbar label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .toolbar select {
+      font: inherit;
+      font-size: 0.9rem;
+      color: var(--fg);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.4rem 0.6rem;
+      min-width: 11rem;
+    }
+    .toolbar .hint {
+      flex: 1;
+      min-width: 100%;
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.35;
+      order: 99;
+    }
+    @media (min-width: 600px) {
+      .toolbar .hint { min-width: 0; flex: 1; order: 0; }
+    }
 
     .grid {
       display: grid;
@@ -108,9 +150,35 @@
     <span class="sub">Test links</span>
   </header>
 
+  <div class="toolbar">
+    <label>Language
+      <select id="langSel">
+        <option value="en">en — English</option>
+        <option value="fr">fr — French</option>
+        <option value="pt">pt — Portuguese</option>
+        <option value="pt-br">pt-br — Brazilian Portuguese</option>
+        <option value="es-mx">es-mx — Mexican Spanish</option>
+        <option value="ru">ru — Russian</option>
+        <option value="el">el — Greek</option>
+        <option value="ja">ja — Japanese (slots only)</option>
+      </select>
+    </label>
+    <label>Currency
+      <select id="curSel">
+        <option value="usd">usd — US Dollar</option>
+        <option value="sek">sek — Swedish Krona</option>
+        <option value="eur" selected>eur — Euro</option>
+        <option value="gbp">gbp — British Pound</option>
+        <option value="thb">thb — Thai Baht (font test)</option>
+        <option value="mwk">mwk — Malawi Kwacha (overflow test)</option>
+      </select>
+    </label>
+    <span class="hint">Currency requires <code>FakeMode=test</code> + <code>Processor=Fakeit</code>; cards already configured with those.</span>
+  </div>
+
   <div class="grid">
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/navigatorExtreme/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/navigatorExtreme/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/navigator.png')"></div>
       <div class="meta">
         <div class="title">Navigator</div>
@@ -118,7 +186,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/goFish/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/goFish/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/swiminator.png')"></div>
       <div class="meta">
         <div class="title">Swiminator</div>
@@ -126,7 +194,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/angler/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/angler/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/fishinator.png')"></div>
       <div class="meta">
         <div class="title">Fishinator</div>
@@ -134,7 +202,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/boxinator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/boxinator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/punchinator.png')"></div>
       <div class="meta">
         <div class="title">Punchinator</div>
@@ -142,7 +210,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/boxinator_ngannou/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/boxinator_ngannou/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/ngannou-punchinator.png')"></div>
       <div class="meta">
         <div class="title">Ngannou Punchinator</div>
@@ -150,7 +218,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/burninator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/burninator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/dragon-run.png')"></div>
       <div class="meta">
         <div class="title">Dragon Run</div>
@@ -158,7 +226,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/bouncinator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/bouncinator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/supershoot-crash.png')"></div>
       <div class="meta">
         <div class="title">Supershoot Crash</div>
@@ -166,7 +234,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/quackinator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/quackinator/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/quackinator.png')"></div>
       <div class="meta">
         <div class="title">Quackinator</div>
@@ -174,7 +242,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/HorseRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/HorseRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/ascot-gold.png')"></div>
       <div class="meta">
         <div class="title">Ascot Gold</div>
@@ -182,7 +250,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/CarRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/CarRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/rushinator.png')"></div>
       <div class="meta">
         <div class="title">Rushinator</div>
@@ -190,7 +258,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/penalty/index.html">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/penalty/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/penalty.png')"></div>
       <div class="meta">
         <div class="title">Penalty from the Streets</div>
@@ -198,7 +266,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Chicken&GameCode=310">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Chicken&GameCode=310&GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/chicken-runner.png')"></div>
       <div class="meta">
         <div class="title">Chicken Runner</div>
@@ -206,7 +274,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Frog&GameCode=311">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Frog&GameCode=311&GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/lucky-leap.png')"></div>
       <div class="meta">
         <div class="title">Lucky Leap</div>
@@ -214,7 +282,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Fish&GameCode=312">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/chickenMines/index.html?GameVariant=Fish&GameCode=312&GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb" style="background-image:url('images/unhooked.png')"></div>
       <div class="meta">
         <div class="title">Unhooked</div>
@@ -222,7 +290,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/DragonRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&lang=en&clientToken=sometoken&processor=Fakeit&FakeMode=test&FakeCultureCode=eur&DbgMockHelios=true">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/DragonRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test&DbgMockHelios=true">
       <div class="thumb placeholder">no thumbnail</div>
       <div class="meta">
         <div class="title">Dragon Racing Crash</div>
@@ -230,7 +298,7 @@
       </div>
     </a>
 
-    <a class="card" href="https://storage.googleapis.com/solidicon-sports-betting/dev/ninjaCatSlot/index.html">
+    <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/ninjaCatSlot/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test">
       <div class="thumb placeholder">no thumbnail</div>
       <div class="meta">
         <div class="title">Katsurus Gold</div>
@@ -239,5 +307,37 @@
     </a>
 
   </div>
+
+  <script>
+    (function () {
+      var LS_LANG = 'solidicon-lang';
+      var LS_CUR  = 'solidicon-currency';
+      var langSel = document.getElementById('langSel');
+      var curSel  = document.getElementById('curSel');
+
+      var savedLang = localStorage.getItem(LS_LANG);
+      var savedCur  = localStorage.getItem(LS_CUR);
+      if (savedLang) langSel.value = savedLang;
+      if (savedCur)  curSel.value  = savedCur;
+
+      function apply() {
+        var lang = langSel.value;
+        var cur  = curSel.value;
+        localStorage.setItem(LS_LANG, lang);
+        localStorage.setItem(LS_CUR, cur);
+        var cards = document.querySelectorAll('a.card[data-base]');
+        for (var i = 0; i < cards.length; i++) {
+          var url = new URL(cards[i].dataset.base);
+          url.searchParams.set('Lang', lang);
+          url.searchParams.set('FakeCultureCode', cur);
+          cards[i].href = url.toString();
+        }
+      }
+
+      langSel.addEventListener('change', apply);
+      curSel.addEventListener('change', apply);
+      apply();
+    })();
+  </script>
 </body>
 </html>
