@@ -327,7 +327,7 @@
       .tag { font-size: 0.6rem; padding: 0.14rem 0.55rem; }
     }
     .tag.crash  { background: #f65221; }
-    .tag.racing { background: #f65221; }
+    .tag.racing { background: #1e456a; }
     .tag.mines  { background: #00accb; }
     .tag.slot   { background: #b18cff; }
     .tag.soon   { background: #00accb; }
@@ -492,17 +492,21 @@
     body.dev-on .pt-btn.dev-only { display: flex; }
     body.player-open { overflow: hidden; }
 
-    .player.viewport-portrait,
-    .player.viewport-landscape {
-      background-color: var(--bg);
+    .player.viewport-portrait::before,
+    .player.viewport-landscape::before {
+      content: '';
+      position: absolute;
+      inset: 0;
       background-image: url('images/pattern-b.svg');
       background-size: 336px auto;
       background-repeat: repeat;
       background-position: center;
+      opacity: 0.05;
+      pointer-events: none;
     }
     @media (prefers-color-scheme: light) {
-      .player.viewport-portrait,
-      .player.viewport-landscape {
+      .player.viewport-portrait::before,
+      .player.viewport-landscape::before {
         background-image: url('images/pattern-a.svg');
         background-size: 280px auto;
       }
