@@ -432,6 +432,9 @@
     }
     .pt-btn.dev-only { display: none; }
     body.dev-on .pt-btn.dev-only { display: flex; }
+    #muteBtn .ico-muted { display: none; }
+    #muteBtn.active .ico-unmuted { display: none; }
+    #muteBtn.active .ico-muted { display: block; }
     body.player-open { overflow: hidden; }
 
     .player.viewport-portrait iframe,
@@ -702,7 +705,7 @@
   </header>
 
   <div class="toolbar">
-    <label>Launch Language
+    <label title="URL param: Lang. Sets the game's initial UI language.">Launch Language
       <select id="langSel">
         <option value="en">🇬🇧 English</option>
         <option value="fr">🇫🇷 French</option>
@@ -713,7 +716,7 @@
         <option value="el">🇬🇷 Greek</option>
       </select>
     </label>
-    <label>Currency
+    <label title="URL param: FakeCultureCode. Requires FakeMode=test (already on every URL). Sets the wallet currency and formatting.">Currency
       <select id="curSel">
         <optgroup label="Featured">
           <option value="usd">usd — US Dollar</option>
@@ -877,7 +880,7 @@
         </optgroup>
       </select>
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="Reveals Dev controls and Game flags rows, plus an in-player postMessage panel and the game→host log.">
       <input type="checkbox" id="advToggle">
       <span class="switch"></span>
       <span class="lbl">Dev mode</span>
@@ -886,33 +889,33 @@
 
   <div class="toolbar dev-bar dev-only">
     <span class="dev-bar-label">Dev controls</span>
-    <label>Vendor Integration
+    <label title="URL param: ExternalVendorIntegration. Fusion makes the game post a quit event when the home button is pressed; EveryMatrix makes it listen for stopAutoplay messages from the host.">Vendor Integration
       <select id="vendorSel">
         <option value="">Default</option>
         <option value="Fusion">Fusion</option>
         <option value="EveryMatrix">EveryMatrix</option>
       </select>
     </label>
-    <label>Wallet Balance
+    <label title="URL param: FakeWalletBalance. Starting fake-wallet amount, in major units of the selected currency. Requires FakeMode=test (already on every URL).">Wallet Balance
       <input type="text" id="walletInp" placeholder="e.g. 100" inputmode="decimal" autocomplete="off">
     </label>
-    <label>Theme filter
+    <label title="Filters cards to ones supporting the chosen theme AND adds Branding=&lt;theme&gt; to every launch URL so the game opens in that operator skin.">Theme filter
       <select id="themeSel">
         <option value="">All themes</option>
       </select>
     </label>
-    <label>Branding override
+    <label title="URL param: Branding. Manual override — wins over the Theme filter mapping. Use exact backend value (e.g. ElephantBet, Dafabet, OneXBet, Melbet, Worldcup).">Branding override
       <input type="text" id="brandingInp" placeholder="e.g. worldcup" autocomplete="off" spellcheck="false">
     </label>
-    <label>GameVariant override
+    <label title="URL param: GameVariant. Maps to ThemeVariant in the game settings (e.g. Chicken / Frog / Fish for Mines, Ngannou for Punchinator).">GameVariant override
       <input type="text" id="variantInp" placeholder="e.g. Chicken" autocomplete="off" spellcheck="false">
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="Adds dbgmockhelios=true to Mines cards only (Chicken Runner / Lucky Leap / Unhooked). With the mocked backend you can step through outcomes — typically used to test the always-win / max-win path.">
       <input type="checkbox" id="cheatMinesChk">
       <span class="switch"></span>
       <span class="lbl">Always Win (Mines)</span>
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="Renders the supported-theme chips under each card so you can see which operator skins each game ships.">
       <input type="checkbox" id="showThemesToggle">
       <span class="switch"></span>
       <span class="lbl">Show themes</span>
@@ -921,37 +924,37 @@
 
   <div class="toolbar dev-bar dev-only">
     <span class="dev-bar-label">Game flags</span>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="URL param: NavigateToOnExit=_about:blank. The game's burger menu only shows the home/back icon when this is set — so this toggle reveals it without breaking out of the iframe overlay (game just navigates the iframe to about:blank on exit).">
       <input type="checkbox" id="flagHome">
       <span class="switch"></span>
       <span class="lbl">Show home button</span>
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="URL param: Mute=true. The audio engine is not initialized at all (not just silenced). Useful for testing audio-init edge cases or for running games without sound.">
       <input type="checkbox" id="flagMute">
       <span class="switch"></span>
       <span class="lbl">Mute audio</span>
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="URL param: EnableChat=false. Removes the chat icon and functionality from the footer panel. Default is enabled.">
       <input type="checkbox" id="flagHideChat">
       <span class="switch"></span>
       <span class="lbl">Hide chat</span>
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="URL param: DbgEnableHowToPlayPopup=true. Debug-only: forces the how-to-play popup on, overriding whatever the server says. Currently only used for the Brazil region by default.">
       <input type="checkbox" id="flagHowToPlay">
       <span class="switch"></span>
       <span class="lbl">Force how-to-play</span>
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="URL param: EnableFreeBetsRedemption=true. Adds the redeem-code / free-flights icon to the burger menu so you can open the redeem panel.">
       <input type="checkbox" id="flagRedeem">
       <span class="switch"></span>
       <span class="lbl">Redeem code panel</span>
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="URL param: FpsMeter=true. Shows the on-screen FPS counter. There's also a keyboard shortcut for this inside the game (FpsKeyboard is on by default).">
       <input type="checkbox" id="flagFps">
       <span class="switch"></span>
       <span class="lbl">FPS meter</span>
     </label>
-    <label class="advanced-toggle">
+    <label class="advanced-toggle" title="URL param: DbgMockHelios=true. Uses the mocked offline Helios backend for the whole game (not just Mines). Debug builds only, and only some games implement it (e.g. Quackinator).">
       <input type="checkbox" id="flagMockHelios">
       <span class="switch"></span>
       <span class="lbl">Mock backend</span>
@@ -1164,6 +1167,10 @@
       <button class="pt-btn" id="vpLandscape" type="button" title="Phone landscape" aria-label="Phone landscape">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2.5"/><line x1="18" y1="11" x2="18" y2="13"/></svg>
       </button>
+      <button class="pt-btn" id="muteBtn" type="button" title="Mute" aria-label="Mute" aria-pressed="false">
+        <svg class="ico-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+        <svg class="ico-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><line x1="16" y1="9" x2="22" y2="15"/><line x1="22" y1="9" x2="16" y2="15"/></svg>
+      </button>
       <button class="pt-btn dev-only" id="toggleUiBtn" type="button" title="Hide dev panels" aria-label="Hide dev panels">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
@@ -1220,6 +1227,7 @@
       var vpPortrait    = document.getElementById('vpPortrait');
       var vpLandscape   = document.getElementById('vpLandscape');
       var toggleUiBtn   = document.getElementById('toggleUiBtn');
+      var muteBtn       = document.getElementById('muteBtn');
 
       advToggle.checked = localStorage.getItem(LS_ADV) === '1';
       var showThemesToggle = document.getElementById('showThemesToggle');
@@ -1298,6 +1306,8 @@
         vpDesktop.classList.add('active');
         vpPortrait.classList.remove('active');
         vpLandscape.classList.remove('active');
+        muted = false;
+        syncMuteUi();
         playerFrame.src = 'about:blank';
         emptyLog();
       }
@@ -1377,6 +1387,28 @@
         toggleUiBtn.classList.toggle('active', hidden);
         toggleUiBtn.title = hidden ? 'Show dev panels' : 'Hide dev panels';
         toggleUiBtn.setAttribute('aria-label', toggleUiBtn.title);
+      });
+
+      var muted = false;
+      function broadcastMute() {
+        postToGame({ name: 'setMuted',      value: muted, muted: muted, sender: 'emwindow' });
+        postToGame({ name: 'setMusicMuted', value: muted, muted: muted, sender: 'emwindow' });
+        postToGame({ name: 'setSoundMuted', value: muted, muted: muted, sender: 'emwindow' });
+        postToGame({ name: muted ? 'mute' : 'unmute', sender: 'emwindow' });
+      }
+      function syncMuteUi() {
+        muteBtn.classList.toggle('active', muted);
+        muteBtn.title = muted ? 'Unmute' : 'Mute';
+        muteBtn.setAttribute('aria-label', muteBtn.title);
+        muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
+      }
+      muteBtn.addEventListener('click', function () {
+        muted = !muted;
+        syncMuteUi();
+        broadcastMute();
+      });
+      playerFrame.addEventListener('load', function () {
+        if (muted) broadcastMute();
       });
 
       var cards = document.querySelectorAll('a.card[data-base]');
