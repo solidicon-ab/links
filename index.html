@@ -285,25 +285,41 @@
       height: auto;
       aspect-ratio: 3 / 2;
       object-fit: cover;
-      border-radius: 2px;
-      opacity: 0.32;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.25);
-      transition: opacity 0.15s, transform 0.15s, outline-color 0.15s;
-      outline: 1.5px solid transparent;
-      outline-offset: 1px;
+      border-radius: 3px;
+      opacity: 0.92;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.22),
+        0 1px 3px rgba(0,0,0,0.35);
+      transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
       cursor: pointer;
+    }
+    @media (prefers-color-scheme: light) {
+      .lang-flag {
+        box-shadow:
+          0 0 0 1px rgba(0,90,112,0.25),
+          0 1px 2px rgba(0,0,0,0.12);
+      }
     }
     .lang-flag.active {
       opacity: 1;
-      outline-color: var(--accent);
-      transform: scale(1.06);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.25), 0 0 8px rgba(0,172,203,0.6);
+      transform: scale(1.12);
+      box-shadow:
+        0 0 0 1.5px var(--accent),
+        0 0 10px rgba(0,172,203,0.7),
+        0 1px 3px rgba(0,0,0,0.35);
     }
     @media (hover: hover) {
-      .lang-flag:hover { opacity: 0.95; transform: scale(1.18); }
-      .lang-flag.active:hover { transform: scale(1.18); }
+      .lang-flag:hover {
+        opacity: 1;
+        transform: scale(1.2);
+        box-shadow:
+          0 0 0 1px var(--accent-bright),
+          0 0 8px rgba(0,214,252,0.5),
+          0 1px 3px rgba(0,0,0,0.35);
+      }
+      .lang-flag.active:hover { transform: scale(1.2); }
     }
-    .lang-flag:active { transform: scale(0.92); }
+    .lang-flag:active { transform: scale(0.95); }
     @media (min-width: 600px) {
       .lang-flag { width: 16px; }
       .lang-flags { gap: 4px; }
@@ -363,6 +379,105 @@
     }
     .player-close:active { transform: scale(0.94); }
     body.player-open { overflow: hidden; }
+
+    .advanced-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-left: auto;
+      font-family: 'Kanit', system-ui, sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      cursor: pointer;
+      user-select: none;
+    }
+    .advanced-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+    .advanced-toggle .switch {
+      position: relative;
+      width: 2.4rem;
+      height: 1.25rem;
+      border-radius: 999px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      transition: background 0.18s ease, border-color 0.18s ease;
+      flex-shrink: 0;
+    }
+    .advanced-toggle .switch::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0.15rem;
+      width: 0.85rem;
+      height: 0.85rem;
+      border-radius: 999px;
+      background: var(--muted);
+      transform: translateY(-50%);
+      transition: left 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .advanced-toggle input:checked + .switch {
+      background: rgba(0,172,203,0.18);
+      border-color: var(--accent);
+    }
+    .advanced-toggle input:checked + .switch::after {
+      left: calc(100% - 1rem);
+      background: var(--accent-bright);
+      box-shadow: 0 0 8px rgba(0,214,252,0.6);
+    }
+    .advanced-toggle input:focus-visible + .switch {
+      box-shadow: 0 0 0 3px rgba(0,172,203,0.25);
+    }
+    .advanced-toggle input:checked ~ .lbl { color: var(--accent); }
+
+    .player-actions {
+      position: fixed;
+      top: 0.8rem;
+      left: 0.8rem;
+      z-index: 101;
+      display: none;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      max-width: calc(100vw - 5rem);
+    }
+    .player-actions.show { display: flex; }
+    .player-actions button {
+      font-family: 'Kanit', system-ui, sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg);
+      background: rgba(7,13,22,0.78);
+      border: 1px solid rgba(208,242,255,0.2);
+      border-radius: 999px;
+      padding: 0.55rem 0.95rem;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: border-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.12s;
+    }
+    @media (prefers-color-scheme: light) {
+      .player-actions button {
+        background: rgba(253,253,254,0.85);
+        border-color: rgba(0,90,112,0.25);
+      }
+    }
+    .player-actions button:hover {
+      border-color: var(--accent);
+      color: var(--accent-bright);
+      box-shadow: 0 0 0 3px rgba(0,172,203,0.22);
+    }
+    @media (prefers-color-scheme: light) {
+      .player-actions button:hover { color: var(--accent); }
+    }
+    .player-actions button:active { transform: scale(0.96); }
+    .player-actions button.flash {
+      border-color: var(--accent-bright);
+      color: var(--accent-bright);
+      box-shadow: 0 0 0 3px rgba(0,214,252,0.32);
+    }
   </style>
 </head>
 <body>
@@ -383,7 +498,6 @@
         <option value="es-mx">Mexican Spanish</option>
         <option value="ru">Russian</option>
         <option value="el">Greek</option>
-        <option value="ja">Japanese (slots only)</option>
       </select>
     </label>
     <label>Currency
@@ -550,6 +664,11 @@
         </optgroup>
       </select>
     </label>
+    <label class="advanced-toggle" title="Show advanced controls in the player">
+      <input type="checkbox" id="advToggle">
+      <span class="switch"></span>
+      <span class="lbl">Advanced</span>
+    </label>
   </div>
 
   <div class="grid">
@@ -684,7 +803,7 @@
         <img class="ph-logo for-light" src="images/logo-icon-black.png" alt="" aria-hidden="true">
         <div class="ph-text">Coming Soon</div>
       </div>
-      <div class="meta" data-langs="en,fr,pt,pt-br,es-mx,ru,el,ja">
+      <div class="meta" data-langs="en,fr,pt,pt-br,es-mx,ru,el">
         <div class="title">Katsurus Gold</div>
         <div class="tags"><span class="tag slot">Slot</span><span class="tag soon">Coming Soon</span></div>
       </div>
@@ -694,6 +813,9 @@
 
   <div class="player" id="player" aria-hidden="true">
     <button class="player-close" id="playerClose" type="button" aria-label="Close game" title="Close (Esc)">×</button>
+    <div class="player-actions" id="playerActions">
+      <button type="button" data-msg='{"type":"stopAutoplay"}' title="Send postMessage stopAutoplay to the game">Stop autoplay</button>
+    </div>
     <iframe id="playerFrame" title="Game" allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write" allowfullscreen></iframe>
   </div>
 
@@ -701,27 +823,62 @@
     (function () {
       var LS_LANG = 'solidicon-lang';
       var LS_CUR  = 'solidicon-currency';
+      var LS_ADV  = 'solidicon-advanced';
       var langSel = document.getElementById('langSel');
       var curSel  = document.getElementById('curSel');
-      var player      = document.getElementById('player');
-      var playerFrame = document.getElementById('playerFrame');
-      var playerClose = document.getElementById('playerClose');
+      var advToggle     = document.getElementById('advToggle');
+      var player        = document.getElementById('player');
+      var playerFrame   = document.getElementById('playerFrame');
+      var playerClose   = document.getElementById('playerClose');
+      var playerActions = document.getElementById('playerActions');
+
+      advToggle.checked = localStorage.getItem(LS_ADV) === '1';
+      function syncActionsVisibility() {
+        if (advToggle.checked && player.classList.contains('open')) {
+          playerActions.classList.add('show');
+        } else {
+          playerActions.classList.remove('show');
+        }
+      }
+      advToggle.addEventListener('change', function () {
+        localStorage.setItem(LS_ADV, advToggle.checked ? '1' : '0');
+        syncActionsVisibility();
+      });
 
       function openPlayer(url) {
         playerFrame.src = url;
         player.classList.add('open');
         player.setAttribute('aria-hidden', 'false');
         document.body.classList.add('player-open');
+        syncActionsVisibility();
       }
       function closePlayer() {
         player.classList.remove('open');
         player.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('player-open');
+        playerActions.classList.remove('show');
         playerFrame.src = 'about:blank';
       }
       playerClose.addEventListener('click', closePlayer);
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && player.classList.contains('open')) closePlayer();
+      });
+
+      playerActions.addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-msg]');
+        if (!btn || !playerFrame.contentWindow) return;
+        var payload;
+        try { payload = JSON.parse(btn.dataset.msg); }
+        catch (_) { payload = btn.dataset.msg; }
+        var targetOrigin = '*';
+        try {
+          if (playerFrame.src && playerFrame.src !== 'about:blank') {
+            targetOrigin = new URL(playerFrame.src).origin;
+          }
+        } catch (_) {}
+        playerFrame.contentWindow.postMessage(payload, targetOrigin);
+        btn.classList.add('flash');
+        setTimeout(function () { btn.classList.remove('flash'); }, 350);
       });
 
       var langToCountry = {
@@ -731,8 +888,7 @@
         'pt-br':'br',
         'es-mx':'mx',
         'ru':   'ru',
-        'el':   'gr',
-        'ja':   'jp'
+        'el':   'gr'
       };
 
       var DEFAULT_LANGS = 'en,fr,pt,pt-br,es-mx,ru,el';
