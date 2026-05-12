@@ -8,6 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Kanit:wght@500;600;700&family=Fragment+Mono&display=swap">
   <style>
+    @font-face {
+      font-family: 'Twemoji Country Flags';
+      unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067, U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
+      src: url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1.8/dist/TwemojiCountryFlags.woff2') format('woff2');
+      font-display: swap;
+    }
+  </style>
+  <style>
     :root {
       color-scheme: dark light;
       /* Solidicon brand palette */
@@ -117,7 +125,7 @@
     }
     .toolbar select {
       font: inherit;
-      font-family: 'Bai Jamjuree', system-ui, sans-serif;
+      font-family: 'Twemoji Country Flags', 'Bai Jamjuree', system-ui, sans-serif;
       font-size: 0.9rem;
       font-weight: 500;
       color: var(--fg);
@@ -272,57 +280,6 @@
     .tag.soon        { color: var(--accent-bright); border-color: rgba(0,172,203,0.55); }
     @media (prefers-color-scheme: light) {
       .tag.soon      { color: var(--accent); }
-    }
-
-.lang-flags {
-      display: flex;
-      gap: 3px;
-      margin-top: 0.45rem;
-      flex-wrap: wrap;
-    }
-    .lang-flag {
-      width: 14px;
-      height: auto;
-      aspect-ratio: 3 / 2;
-      object-fit: cover;
-      border-radius: 3px;
-      opacity: 0.92;
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.22),
-        0 1px 3px rgba(0,0,0,0.35);
-      transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
-      cursor: pointer;
-    }
-    @media (prefers-color-scheme: light) {
-      .lang-flag {
-        box-shadow:
-          0 0 0 1px rgba(0,90,112,0.25),
-          0 1px 2px rgba(0,0,0,0.12);
-      }
-    }
-    .lang-flag.active {
-      opacity: 1;
-      transform: scale(1.12);
-      box-shadow:
-        0 0 0 1.5px var(--accent),
-        0 0 10px rgba(0,172,203,0.7),
-        0 1px 3px rgba(0,0,0,0.35);
-    }
-    @media (hover: hover) {
-      .lang-flag:hover {
-        opacity: 1;
-        transform: scale(1.2);
-        box-shadow:
-          0 0 0 1px var(--accent-bright),
-          0 0 8px rgba(0,214,252,0.5),
-          0 1px 3px rgba(0,0,0,0.35);
-      }
-      .lang-flag.active:hover { transform: scale(1.2); }
-    }
-    .lang-flag:active { transform: scale(0.95); }
-    @media (min-width: 600px) {
-      .lang-flag { width: 16px; }
-      .lang-flags { gap: 4px; }
     }
 
     .player {
@@ -489,15 +446,15 @@
   </header>
 
   <div class="toolbar">
-    <label>Language
+    <label>Launch Language
       <select id="langSel">
-        <option value="en">English</option>
-        <option value="fr">French</option>
-        <option value="pt">Portuguese</option>
-        <option value="pt-br">Brazilian Portuguese</option>
-        <option value="es-mx">Mexican Spanish</option>
-        <option value="ru">Russian</option>
-        <option value="el">Greek</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="fr">🇫🇷 French</option>
+        <option value="pt">🇵🇹 Portuguese</option>
+        <option value="pt-br">🇧🇷 Brazilian Portuguese</option>
+        <option value="es-mx">🇲🇽 Mexican Spanish</option>
+        <option value="ru">🇷🇺 Russian</option>
+        <option value="el">🇬🇷 Greek</option>
       </select>
     </label>
     <label>Currency
@@ -881,54 +838,13 @@
         setTimeout(function () { btn.classList.remove('flash'); }, 350);
       });
 
-      var langToCountry = {
-        'en':   'gb',
-        'fr':   'fr',
-        'pt':   'pt',
-        'pt-br':'br',
-        'es-mx':'mx',
-        'ru':   'ru',
-        'el':   'gr'
-      };
-
-      var DEFAULT_LANGS = 'en,fr,pt,pt-br,es-mx,ru,el';
-
-      function flagSrc(code) {
-        return 'https://flagcdn.com/' + (langToCountry[code] || 'un') + '.svg';
-      }
-
       var cards = document.querySelectorAll('a.card[data-base]');
-      var langFlags = [];
       cards.forEach(function (card) {
         card.addEventListener('click', function (e) {
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
           e.preventDefault();
           openPlayer(card.href);
         });
-        var meta = card.querySelector('.meta');
-        var supported = (meta.dataset.langs || DEFAULT_LANGS).split(',');
-        var row = document.createElement('div');
-        row.className = 'lang-flags';
-        supported.forEach(function (l) {
-          var img = document.createElement('img');
-          img.className = 'lang-flag';
-          img.dataset.lang = l;
-          img.alt = l;
-          img.title = 'Launch in ' + l;
-          img.decoding = 'async';
-          img.src = flagSrc(l);
-          img.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var url = new URL(card.dataset.base);
-            url.searchParams.set('Lang', this.dataset.lang);
-            url.searchParams.set('FakeCultureCode', curSel.value);
-            openPlayer(url.toString());
-          });
-          row.appendChild(img);
-          langFlags.push(img);
-        });
-        meta.appendChild(row);
       });
 
       var savedLang = localStorage.getItem(LS_LANG);
@@ -946,10 +862,6 @@
           url.searchParams.set('Lang', lang);
           url.searchParams.set('FakeCultureCode', cur);
           cards[i].href = url.toString();
-        }
-        for (var k = 0; k < langFlags.length; k++) {
-          if (langFlags[k].dataset.lang === lang) langFlags[k].classList.add('active');
-          else langFlags[k].classList.remove('active');
         }
       }
 
