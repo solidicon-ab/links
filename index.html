@@ -847,7 +847,7 @@
         <option value="el">🇬🇷 Greek</option>
       </select>
     </label>
-    <label data-tip="URL param: FakeCultureCode. Requires FakeMode=test (already on every URL). Sets the wallet currency and formatting.">Currency
+    <label data-tip="URL param: FakeCultureCode. Requires FakeMode=test (already on every URL). Sets the wallet currency and formatting.">Launch Currency
       <select id="curSel">
         <optgroup label="Featured">
           <option value="usd">usd — US Dollar</option>
@@ -1011,7 +1011,7 @@
         </optgroup>
       </select>
     </label>
-    <label class="advanced-toggle" data-tip="Reveals Dev controls and Game flags rows, plus an in-player postMessage panel and the game→host log." data-tip-always="1">
+    <label class="advanced-toggle" data-tip="Reveals Launch dev controls and Launch game flags rows, plus an in-player postMessage panel and the game→host log." data-tip-always="1">
       <input type="checkbox" id="advToggle">
       <span class="switch"></span>
       <span class="lbl">Dev mode</span>
@@ -1019,7 +1019,7 @@
   </div>
 
   <div class="toolbar dev-bar dev-only">
-    <span class="dev-bar-label">Dev controls</span>
+    <span class="dev-bar-label">Launch dev controls</span>
     <label data-tip="URL param: ExternalVendorIntegration. Fusion makes the game post a quit event when the home button is pressed; EveryMatrix makes it listen for stopAutoplay messages from the host.">Vendor Integration
       <select id="vendorSel">
         <option value="">Default</option>
@@ -1060,7 +1060,7 @@
   </div>
 
   <div class="toolbar dev-bar dev-only">
-    <span class="dev-bar-label">Game flags</span>
+    <span class="dev-bar-label">Launch game flags</span>
     <label class="advanced-toggle" data-tip="URL param: NavigateToOnExit=_about:blank. The game's burger menu only shows the home/back icon when this is set — so this toggle reveals it without breaking out of the iframe overlay (game just navigates the iframe to about:blank on exit).">
       <input type="checkbox" id="flagHome">
       <span class="switch"></span>
