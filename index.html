@@ -1530,7 +1530,6 @@
         });
       }
       vendorSel.addEventListener('change', syncVendorGatedButtons);
-      syncVendorGatedButtons();
 
       forceErrorBtn.addEventListener('click', function () {
         postToGame({ name: 'forceServerError', code: parseInt(errorCodeSel.value, 10), sender: 'emwindow' }, forceErrorBtn);
@@ -1667,6 +1666,7 @@
       if (savedLang)   langSel.value   = savedLang;
       if (savedCur)    curSel.value    = savedCur;
       if (savedVendor !== null) vendorSel.value = savedVendor;
+      syncVendorGatedButtons();
       if (savedWallet !== null) walletInp.value = savedWallet;
       if (savedBranding !== null) brandingInp.value = savedBranding;
       if (savedVariant !== null) variantInp.value = savedVariant;
