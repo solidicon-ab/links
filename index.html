@@ -647,7 +647,7 @@
       box-shadow: 0 24px 60px rgba(0,0,0,0.55);
     }
     .player.viewport-portrait .player-spinner {
-      height: min(95vh, 1040px);
+      height: min(95dvh, 1040px);
       width: auto;
       max-width: 93vw;
       aspect-ratio: 9 / 16;
@@ -775,7 +775,7 @@
       box-shadow: 0 24px 60px rgba(0,0,0,0.55), 0 0 0 3px rgba(0,172,203,0.18);
     }
     .player.viewport-portrait iframe {
-      height: min(95vh, 1040px);
+      height: min(95dvh, 1040px);
       width: auto;
       max-width: 93vw;
       aspect-ratio: 9 / 16;
@@ -803,8 +803,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      height: 95vh;
-      width: calc(95vh * 800 / 1600);
+      height: 95dvh;
+      width: calc(95dvh * 800 / 1600);
       background-repeat: no-repeat;
       background-position: center;
       background-size: 100% 100%;
@@ -843,10 +843,10 @@
     }
     .player.phone-mode iframe {
       position: absolute !important;
-      top: calc(50vh - 47.5vh + 95vh * var(--screen-top)) !important;
-      left: calc(50% - (95vh * 800 / 1600) / 2 + (95vh * 800 / 1600) * var(--screen-left)) !important;
-      width: calc(95vh * 800 / 1600 * var(--screen-w)) !important;
-      height: calc(95vh * var(--screen-h)) !important;
+      top: calc(50dvh - 47.5dvh + 95dvh * var(--screen-top)) !important;
+      left: calc(50% - (95dvh * 800 / 1600) / 2 + (95dvh * 800 / 1600) * var(--screen-left)) !important;
+      width: calc(95dvh * 800 / 1600 * var(--screen-w)) !important;
+      height: calc(95dvh * var(--screen-h)) !important;
       transform: none !important;
       border-radius: 0 !important;
       box-shadow: none !important;
@@ -855,11 +855,11 @@
     }
     .player.phone-mode .player-spinner {
       inset: auto;
-      top: calc(50vh - 47.5vh + 95vh * (var(--screen-top) + var(--screen-h) / 2));
-      left: calc(50% - (95vh * 800 / 1600) / 2 + (95vh * 800 / 1600) * (var(--screen-left) + var(--screen-w) / 2));
+      top: calc(50dvh - 47.5dvh + 95dvh * (var(--screen-top) + var(--screen-h) / 2));
+      left: calc(50% - (95dvh * 800 / 1600) / 2 + (95dvh * 800 / 1600) * (var(--screen-left) + var(--screen-w) / 2));
       transform: translate(-50%, -50%);
-      width: calc(95vh * 800 / 1600 * var(--screen-w));
-      height: calc(95vh * var(--screen-h));
+      width: calc(95dvh * 800 / 1600 * var(--screen-w));
+      height: calc(95dvh * var(--screen-h));
       border-radius: 0;
     }
     .player.phone-mode .player-spinner .ps-label { font-size: 0.55rem; }
