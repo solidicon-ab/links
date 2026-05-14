@@ -355,7 +355,184 @@
     .tag.racing { background: #1e456a; }
     .tag.mines  { background: #00accb; }
     .tag.slot   { background: #b18cff; }
+    .tag.vfl    { background: #2d6a4f; }
+    .tag.mini   { background: #d97706; }
     .tag.soon   { background: #00accb; }
+
+    .card-collection { cursor: pointer; }
+    .thumb-mosaic {
+      aspect-ratio: 725 / 460;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      background: #000;
+    }
+    .thumb-mosaic .m-tile {
+      background-color: #0d1620;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .mini-reveal {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 6px;
+      padding: 6px;
+      background: rgba(7, 13, 22, 0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.18s ease, visibility 0.18s ease;
+      z-index: 2;
+    }
+    @media (hover: hover) {
+      .card-collection:hover .mini-reveal,
+      .card-collection:focus-within .mini-reveal {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+    .card-collection.active .mini-reveal {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .mini-option {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: stretch;
+      text-decoration: none;
+      color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #0d1620;
+      background-position: left center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      border: 1px solid var(--border);
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.18s ease;
+    }
+    .mini-option:hover {
+      border-color: var(--accent);
+      transform: scale(1.02);
+      box-shadow: 0 0 0 1px rgba(0,172,203,0.55), 0 6px 18px rgba(0,214,252,0.28);
+    }
+    .mo-title {
+      width: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0.95) 100%);
+      font-family: 'Kanit', system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 0.62rem;
+      text-align: center;
+      padding: 0.65rem 0.35rem 0.45rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    @media (min-width: 600px) {
+      .mo-title { font-size: 0.72rem; padding: 0.8rem 0.4rem 0.55rem; }
+    }
+    .mini-all-btn {
+      grid-column: 1 / -1;
+      margin-top: 0.25rem;
+      padding: 0.45rem 0.6rem;
+      background: rgba(0,172,203,0.14);
+      color: var(--accent-bright);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      font-family: 'Kanit', system-ui, sans-serif;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s ease, box-shadow 0.18s ease;
+    }
+    .mini-all-btn:hover {
+      background: rgba(0,172,203,0.28);
+      box-shadow: 0 0 12px rgba(0,214,252,0.35);
+    }
+
+    .multi-phone {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: var(--bg);
+      display: none;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      padding: 1rem 1.5rem;
+    }
+    .multi-phone.open { display: flex; }
+    .multi-phone::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('images/pattern-b.svg');
+      background-size: 336px auto;
+      background-repeat: repeat;
+      background-position: center;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+    @media (prefers-color-scheme: light) {
+      .multi-phone::before {
+        background-image: url('images/pattern-a.svg');
+        background-size: 280px auto;
+      }
+    }
+    .mp-phone {
+      position: relative;
+      width: min(22vw, 47.5vh);
+      aspect-ratio: 800 / 1600;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.5));
+      flex-shrink: 0;
+    }
+    .mp-phone.blue  { background-image: url('images/nokia-blue.png'); }
+    .mp-phone.green { background-image: url('images/nokia-green.png'); }
+    .mp-phone.red   { background-image: url('images/nokia-red.png'); }
+    .mp-phone iframe {
+      position: absolute;
+      top: 11.5%;
+      left: 19.6%;
+      width: 59.9%;
+      height: 38.3%;
+      border: 0;
+      background: #000;
+    }
+    .mp-close {
+      position: fixed;
+      top: 0.8rem;
+      right: 0.8rem;
+      z-index: 102;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 999px;
+      background: rgba(7, 13, 22, 0.92);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .mp-close svg { width: 1.15rem; height: 1.15rem; }
+    .mp-close:hover { border-color: var(--accent); color: var(--accent-bright); }
+    body.multi-open { overflow: hidden; }
 
     .themes {
       display: none;
@@ -573,6 +750,83 @@
     }
     .player.ui-hidden .player-actions,
     .player.ui-hidden .player-log { display: none !important; }
+
+    .phone-rotor {
+      position: absolute;
+      inset: 0;
+      transform-origin: center;
+      transition: transform 0.55s cubic-bezier(0.7, 0, 0.25, 1);
+    }
+    .player.phone-mode.viewport-landscape .phone-rotor { transform: rotate(90deg); }
+    .player.phone-mode.viewport-portrait  .phone-rotor { transform: rotate(0deg); }
+    .player.phone-mode #vpDesktop { display: none; }
+
+    .phone-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 95vh;
+      width: calc(95vh * 800 / 1600);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+      pointer-events: none;
+      z-index: 2;
+      display: none;
+      filter: drop-shadow(0 24px 60px rgba(0,0,0,0.55));
+    }
+    .player.phone-mode .phone-overlay { display: block; }
+    .player.phone-blue  .phone-overlay { background-image: url('images/nokia-blue.png'); }
+    .player.phone-green .phone-overlay { background-image: url('images/nokia-green.png'); }
+    .player.phone-red   .phone-overlay { background-image: url('images/nokia-red.png'); }
+    .player.phone-mode::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('images/pattern-b.svg');
+      background-size: 336px auto;
+      background-repeat: repeat;
+      background-position: center;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+    @media (prefers-color-scheme: light) {
+      .player.phone-mode::before {
+        background-image: url('images/pattern-a.svg');
+        background-size: 280px auto;
+      }
+    }
+    /* Screen cutout within colored nokia PNGs (800x1600). Tunable via sliders panel. */
+    .player.phone-mode {
+      --screen-left: 0.196;
+      --screen-top: 0.115;
+      --screen-w: 0.599;
+      --screen-h: 0.383;
+    }
+    .player.phone-mode iframe {
+      position: absolute !important;
+      top: calc(50vh - 47.5vh + 95vh * var(--screen-top)) !important;
+      left: calc(50% - (95vh * 800 / 1600) / 2 + (95vh * 800 / 1600) * var(--screen-left)) !important;
+      width: calc(95vh * 800 / 1600 * var(--screen-w)) !important;
+      height: calc(95vh * var(--screen-h)) !important;
+      transform: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: #000 !important;
+      z-index: 1;
+    }
+    .player.phone-mode .player-spinner {
+      inset: auto;
+      top: calc(50vh - 47.5vh + 95vh * (var(--screen-top) + var(--screen-h) / 2));
+      left: calc(50% - (95vh * 800 / 1600) / 2 + (95vh * 800 / 1600) * (var(--screen-left) + var(--screen-w) / 2));
+      transform: translate(-50%, -50%);
+      width: calc(95vh * 800 / 1600 * var(--screen-w));
+      height: calc(95vh * var(--screen-h));
+      border-radius: 0;
+    }
+    .player.phone-mode .player-spinner .ps-label { font-size: 0.55rem; }
+
 
     .advanced-toggle {
       display: flex;
@@ -856,8 +1110,9 @@
     <div class="brand" id="brandReset" role="button" tabindex="0" title="Reset to default view" aria-label="Reset to default view">
       <img class="logotype for-dark"  src="images/logotype-white.png" alt="Solidicon">
       <img class="logotype for-light" src="images/logotype-black.png" alt="Solidicon">
+      <span class="sub">iGaming</span>
     </div>
-    <a class="cross-link" href="https://solidicon-ab.github.io/retail/">Retail &rarr;</a>
+    <a class="cross-link" id="retailLink" href="https://solidicon-ab.github.io/retail/">Retail &rarr;</a>
   </header>
 
   <div class="toolbar">
@@ -875,163 +1130,163 @@
     <label data-tip="URL param: FakeCultureCode. Requires FakeMode=test (already on every URL). Sets the wallet currency and formatting.">Launch Currency
       <select id="curSel">
         <optgroup label="Featured">
-          <option value="usd">usd — US Dollar</option>
-          <option value="sek">sek — Swedish Krona</option>
-          <option value="eur" selected>eur — Euro</option>
-          <option value="gbp">gbp — British Pound</option>
-          <option value="thb">thb — Thai Baht (font test)</option>
-          <option value="mwk">mwk — Malawi Kwacha (overflow test)</option>
+          <option value="usd">usd — US Dollar ($)</option>
+          <option value="sek">sek — Swedish Krona (kr)</option>
+          <option value="eur" selected>eur — Euro (€)</option>
+          <option value="gbp">gbp — British Pound (£)</option>
+          <option value="thb">thb — Thai Baht — font test (฿)</option>
+          <option value="mwk">mwk — Malawi Kwacha — overflow test (MK)</option>
         </optgroup>
         <optgroup label="All ISO 4217">
-          <option value="aed">aed — UAE Dirham</option>
-          <option value="afn">afn — Afghani</option>
-          <option value="all">all — Lek</option>
-          <option value="amd">amd — Armenian Dram</option>
+          <option value="aed">aed — UAE Dirham (د.إ.)</option>
+          <option value="afn">afn — Afghani (؋)</option>
+          <option value="all">all — Lek (Lekë)</option>
+          <option value="amd">amd — Armenian Dram (֏)</option>
           <option value="ang">ang — Netherlands Antillean Guilder</option>
-          <option value="aoa">aoa — Kwanza</option>
-          <option value="ars">ars — Argentine Peso</option>
-          <option value="aud">aud — Australian Dollar</option>
+          <option value="aoa">aoa — Kwanza (Kz)</option>
+          <option value="ars">ars — Argentine Peso ($)</option>
+          <option value="aud">aud — Australian Dollar ($)</option>
           <option value="awg">awg — Aruban Florin</option>
-          <option value="azn">azn — Azerbaijani Manat</option>
-          <option value="bam">bam — Convertible Mark</option>
-          <option value="bbd">bbd — Barbados Dollar</option>
-          <option value="bdt">bdt — Taka</option>
-          <option value="bgn">bgn — Bulgarian Lev</option>
-          <option value="bhd">bhd — Bahraini Dinar</option>
+          <option value="azn">azn — Azerbaijani Manat (₼)</option>
+          <option value="bam">bam — Convertible Mark (KM)</option>
+          <option value="bbd">bbd — Barbados Dollar ($)</option>
+          <option value="bdt">bdt — Taka (৳)</option>
+          <option value="bgn">bgn — Bulgarian Lev (лв.)</option>
+          <option value="bhd">bhd — Bahraini Dinar (د.ب.)</option>
           <option value="bif">bif — Burundi Franc</option>
-          <option value="bmd">bmd — Bermudian Dollar</option>
-          <option value="bnd">bnd — Brunei Dollar</option>
-          <option value="bob">bob — Boliviano</option>
-          <option value="brl">brl — Brazilian Real</option>
-          <option value="bsd">bsd — Bahamian Dollar</option>
+          <option value="bmd">bmd — Bermudian Dollar ($)</option>
+          <option value="bnd">bnd — Brunei Dollar ($)</option>
+          <option value="bob">bob — Boliviano (Bs)</option>
+          <option value="brl">brl — Brazilian Real (R$)</option>
+          <option value="bsd">bsd — Bahamian Dollar ($)</option>
           <option value="btn">btn — Ngultrum</option>
-          <option value="bwp">bwp — Pula</option>
-          <option value="byn">byn — Belarusian Ruble</option>
-          <option value="bzd">bzd — Belize Dollar</option>
-          <option value="cad">cad — Canadian Dollar</option>
-          <option value="cdf">cdf — Congolese Franc</option>
+          <option value="bwp">bwp — Pula (P)</option>
+          <option value="byn">byn — Belarusian Ruble (Br)</option>
+          <option value="bzd">bzd — Belize Dollar ($)</option>
+          <option value="cad">cad — Canadian Dollar ($)</option>
+          <option value="cdf">cdf — Congolese Franc (FC)</option>
           <option value="chf">chf — Swiss Franc</option>
-          <option value="clp">clp — Chilean Peso</option>
-          <option value="cny">cny — Yuan Renminbi</option>
-          <option value="cop">cop — Colombian Peso</option>
-          <option value="crc">crc — Costa Rican Colon</option>
-          <option value="cup">cup — Cuban Peso</option>
+          <option value="clp">clp — Chilean Peso ($)</option>
+          <option value="cny">cny — Yuan Renminbi (¥)</option>
+          <option value="cop">cop — Colombian Peso ($)</option>
+          <option value="crc">crc — Costa Rican Colon (₡)</option>
+          <option value="cup">cup — Cuban Peso ($)</option>
           <option value="cve">cve — Cabo Verde Escudo</option>
-          <option value="czk">czk — Czech Koruna</option>
+          <option value="czk">czk — Czech Koruna (Kč)</option>
           <option value="djf">djf — Djibouti Franc</option>
-          <option value="dkk">dkk — Danish Krone</option>
-          <option value="dop">dop — Dominican Peso</option>
-          <option value="dzd">dzd — Algerian Dinar</option>
-          <option value="egp">egp — Egyptian Pound</option>
+          <option value="dkk">dkk — Danish Krone (kr)</option>
+          <option value="dop">dop — Dominican Peso ($)</option>
+          <option value="dzd">dzd — Algerian Dinar (د.ج.)</option>
+          <option value="egp">egp — Egyptian Pound (E£)</option>
           <option value="ern">ern — Nakfa</option>
-          <option value="etb">etb — Ethiopian Birr</option>
-          <option value="fjd">fjd — Fiji Dollar</option>
-          <option value="fkp">fkp — Falkland Islands Pound</option>
-          <option value="gel">gel — Lari</option>
-          <option value="ghs">ghs — Ghana Cedi</option>
-          <option value="gip">gip — Gibraltar Pound</option>
+          <option value="etb">etb — Ethiopian Birr (ብር)</option>
+          <option value="fjd">fjd — Fiji Dollar ($)</option>
+          <option value="fkp">fkp — Falkland Islands Pound (£)</option>
+          <option value="gel">gel — Lari (₾)</option>
+          <option value="ghs">ghs — Ghana Cedi (GH₵)</option>
+          <option value="gip">gip — Gibraltar Pound (£)</option>
           <option value="gmd">gmd — Dalasi</option>
-          <option value="gnf">gnf — Guinean Franc</option>
-          <option value="gtq">gtq — Quetzal</option>
-          <option value="gyd">gyd — Guyana Dollar</option>
-          <option value="hkd">hkd — Hong Kong Dollar</option>
-          <option value="hnl">hnl — Lempira</option>
+          <option value="gnf">gnf — Guinean Franc (FG)</option>
+          <option value="gtq">gtq — Quetzal (Q)</option>
+          <option value="gyd">gyd — Guyana Dollar ($)</option>
+          <option value="hkd">hkd — Hong Kong Dollar ($)</option>
+          <option value="hnl">hnl — Lempira (L)</option>
           <option value="htg">htg — Gourde</option>
-          <option value="huf">huf — Forint</option>
-          <option value="idr">idr — Rupiah</option>
-          <option value="ils">ils — New Israeli Sheqel</option>
-          <option value="inr">inr — Indian Rupee</option>
-          <option value="iqd">iqd — Iraqi Dinar</option>
-          <option value="irr">irr — Iranian Rial</option>
-          <option value="isk">isk — Iceland Krona</option>
-          <option value="jmd">jmd — Jamaican Dollar</option>
-          <option value="jod">jod — Jordanian Dinar</option>
-          <option value="jpy">jpy — Yen</option>
-          <option value="kes">kes — Kenyan Shilling</option>
-          <option value="kgs">kgs — Som</option>
-          <option value="khr">khr — Riel</option>
-          <option value="kmf">kmf — Comorian Franc</option>
-          <option value="kpw">kpw — North Korean Won</option>
-          <option value="krw">krw — Won</option>
-          <option value="kwd">kwd — Kuwaiti Dinar</option>
-          <option value="kyd">kyd — Cayman Islands Dollar</option>
-          <option value="kzt">kzt — Tenge</option>
-          <option value="lak">lak — Lao Kip</option>
-          <option value="lbp">lbp — Lebanese Pound</option>
-          <option value="lkr">lkr — Sri Lanka Rupee</option>
-          <option value="lrd">lrd — Liberian Dollar</option>
+          <option value="huf">huf — Forint (Ft)</option>
+          <option value="idr">idr — Rupiah (Rp)</option>
+          <option value="ils">ils — New Israeli Sheqel (₪)</option>
+          <option value="inr">inr — Indian Rupee (₹)</option>
+          <option value="iqd">iqd — Iraqi Dinar (د.ع.)</option>
+          <option value="irr">irr — Iranian Rial (ریال)</option>
+          <option value="isk">isk — Iceland Krona (kr)</option>
+          <option value="jmd">jmd — Jamaican Dollar ($)</option>
+          <option value="jod">jod — Jordanian Dinar (د.أ.)</option>
+          <option value="jpy">jpy — Yen (¥)</option>
+          <option value="kes">kes — Kenyan Shilling (Ksh)</option>
+          <option value="kgs">kgs — Som (⃀)</option>
+          <option value="khr">khr — Riel (៛)</option>
+          <option value="kmf">kmf — Comorian Franc (CF)</option>
+          <option value="kpw">kpw — North Korean Won (₩)</option>
+          <option value="krw">krw — Won (₩)</option>
+          <option value="kwd">kwd — Kuwaiti Dinar (د.ك.)</option>
+          <option value="kyd">kyd — Cayman Islands Dollar ($)</option>
+          <option value="kzt">kzt — Tenge (₸)</option>
+          <option value="lak">lak — Lao Kip (₭)</option>
+          <option value="lbp">lbp — Lebanese Pound (L£)</option>
+          <option value="lkr">lkr — Sri Lanka Rupee (Rs)</option>
+          <option value="lrd">lrd — Liberian Dollar ($)</option>
           <option value="lsl">lsl — Loti</option>
           <option value="lyd">lyd — Libyan Dinar</option>
-          <option value="mad">mad — Moroccan Dirham</option>
-          <option value="mdl">mdl — Moldovan Leu</option>
-          <option value="mga">mga — Malagasy Ariary</option>
-          <option value="mkd">mkd — Denar</option>
-          <option value="mmk">mmk — Kyat</option>
-          <option value="mnt">mnt — Tugrik</option>
+          <option value="mad">mad — Moroccan Dirham (د.م.)</option>
+          <option value="mdl">mdl — Moldovan Leu (L)</option>
+          <option value="mga">mga — Malagasy Ariary (Ar)</option>
+          <option value="mkd">mkd — Denar (ден.)</option>
+          <option value="mmk">mmk — Kyat (K)</option>
+          <option value="mnt">mnt — Tugrik (₮)</option>
           <option value="mop">mop — Pataca</option>
           <option value="mru">mru — Ouguiya</option>
-          <option value="mur">mur — Mauritius Rupee</option>
+          <option value="mur">mur — Mauritius Rupee (Rs)</option>
           <option value="mvr">mvr — Rufiyaa</option>
-          <option value="mxn">mxn — Mexican Peso</option>
-          <option value="myr">myr — Malaysian Ringgit</option>
-          <option value="mzn">mzn — Mozambique Metical</option>
-          <option value="nad">nad — Namibia Dollar</option>
-          <option value="ngn">ngn — Naira</option>
-          <option value="nio">nio — Cordoba Oro</option>
-          <option value="nok">nok — Norwegian Krone</option>
-          <option value="npr">npr — Nepalese Rupee</option>
-          <option value="nzd">nzd — New Zealand Dollar</option>
-          <option value="omr">omr — Rial Omani</option>
+          <option value="mxn">mxn — Mexican Peso ($)</option>
+          <option value="myr">myr — Malaysian Ringgit (RM)</option>
+          <option value="mzn">mzn — Mozambique Metical (MTn)</option>
+          <option value="nad">nad — Namibia Dollar ($)</option>
+          <option value="ngn">ngn — Naira (₦)</option>
+          <option value="nio">nio — Cordoba Oro (C$)</option>
+          <option value="nok">nok — Norwegian Krone (kr)</option>
+          <option value="npr">npr — Nepalese Rupee (Rs)</option>
+          <option value="nzd">nzd — New Zealand Dollar ($)</option>
+          <option value="omr">omr — Rial Omani (ر.ع.)</option>
           <option value="pab">pab — Balboa</option>
-          <option value="pen">pen — Sol</option>
+          <option value="pen">pen — Sol (S/)</option>
           <option value="pgk">pgk — Kina</option>
-          <option value="php">php — Philippine Peso</option>
-          <option value="pkr">pkr — Pakistan Rupee</option>
-          <option value="pln">pln — Zloty</option>
-          <option value="pyg">pyg — Guarani</option>
-          <option value="qar">qar — Qatari Rial</option>
-          <option value="ron">ron — Romanian Leu</option>
+          <option value="php">php — Philippine Peso (₱)</option>
+          <option value="pkr">pkr — Pakistan Rupee (Rs)</option>
+          <option value="pln">pln — Zloty (zł)</option>
+          <option value="pyg">pyg — Guarani (₲)</option>
+          <option value="qar">qar — Qatari Rial (ر.ق.)</option>
+          <option value="ron">ron — Romanian Leu (lei)</option>
           <option value="rsd">rsd — Serbian Dinar</option>
-          <option value="rub">rub — Russian Ruble</option>
-          <option value="rwf">rwf — Rwanda Franc</option>
-          <option value="sar">sar — Saudi Riyal</option>
-          <option value="sbd">sbd — Solomon Islands Dollar</option>
+          <option value="rub">rub — Russian Ruble (₽)</option>
+          <option value="rwf">rwf — Rwanda Franc (RF)</option>
+          <option value="sar">sar — Saudi Riyal (ر.س.)</option>
+          <option value="sbd">sbd — Solomon Islands Dollar ($)</option>
           <option value="scr">scr — Seychelles Rupee</option>
           <option value="sdg">sdg — Sudanese Pound</option>
-          <option value="sgd">sgd — Singapore Dollar</option>
-          <option value="shp">shp — Saint Helena Pound</option>
+          <option value="sgd">sgd — Singapore Dollar ($)</option>
+          <option value="shp">shp — Saint Helena Pound (£)</option>
           <option value="sle">sle — Leone</option>
           <option value="sos">sos — Somali Shilling</option>
-          <option value="srd">srd — Surinam Dollar</option>
-          <option value="ssp">ssp — South Sudanese Pound</option>
-          <option value="stn">stn — Dobra</option>
+          <option value="srd">srd — Surinam Dollar ($)</option>
+          <option value="ssp">ssp — South Sudanese Pound (£)</option>
+          <option value="stn">stn — Dobra (Db)</option>
           <option value="svc">svc — El Salvador Colon</option>
-          <option value="syp">syp — Syrian Pound</option>
+          <option value="syp">syp — Syrian Pound (£)</option>
           <option value="szl">szl — Lilangeni</option>
-          <option value="tjs">tjs — Somoni</option>
+          <option value="tjs">tjs — Somoni (сом.)</option>
           <option value="tmt">tmt — Turkmenistan New Manat</option>
-          <option value="tnd">tnd — Tunisian Dinar</option>
-          <option value="top">top — Pa'anga</option>
-          <option value="try">try — Turkish Lira</option>
-          <option value="ttd">ttd — Trinidad and Tobago Dollar</option>
-          <option value="twd">twd — New Taiwan Dollar</option>
-          <option value="tzs">tzs — Tanzanian Shilling</option>
-          <option value="uah">uah — Hryvnia</option>
-          <option value="ugx">ugx — Uganda Shilling</option>
-          <option value="uyu">uyu — Peso Uruguayo</option>
-          <option value="uzs">uzs — Uzbekistan Sum</option>
-          <option value="ves">ves — Bolívar Soberano</option>
-          <option value="vnd">vnd — Dong</option>
+          <option value="tnd">tnd — Tunisian Dinar (د.ت.)</option>
+          <option value="top">top — Pa'anga (T$)</option>
+          <option value="try">try — Turkish Lira (₺)</option>
+          <option value="ttd">ttd — Trinidad and Tobago Dollar ($)</option>
+          <option value="twd">twd — New Taiwan Dollar ($)</option>
+          <option value="tzs">tzs — Tanzanian Shilling (TSh)</option>
+          <option value="uah">uah — Hryvnia (₴)</option>
+          <option value="ugx">ugx — Uganda Shilling (USh)</option>
+          <option value="uyu">uyu — Peso Uruguayo ($)</option>
+          <option value="uzs">uzs — Uzbekistan Sum (soʻm)</option>
+          <option value="ves">ves — Bolívar Soberano (Bs.S)</option>
+          <option value="vnd">vnd — Dong (₫)</option>
           <option value="vuv">vuv — Vatu</option>
           <option value="wst">wst — Tala</option>
-          <option value="xaf">xaf — CFA Franc BEAC</option>
-          <option value="xcd">xcd — East Caribbean Dollar</option>
-          <option value="xcg">xcg — Caribbean Guilder</option>
-          <option value="xof">xof — CFA Franc BCEAO</option>
-          <option value="xpf">xpf — CFP Franc</option>
+          <option value="xaf">xaf — CFA Franc BEAC (FCFA)</option>
+          <option value="xcd">xcd — East Caribbean Dollar ($)</option>
+          <option value="xcg">xcg — Caribbean Guilder (Cg.)</option>
+          <option value="xof">xof — CFA Franc BCEAO (F CFA)</option>
+          <option value="xpf">xpf — CFP Franc (CFPF)</option>
           <option value="yer">yer — Yemeni Rial</option>
-          <option value="zar">zar — Rand</option>
-          <option value="zmw">zmw — Zambian Kwacha</option>
+          <option value="zar">zar — Rand (R)</option>
+          <option value="zmw">zmw — Zambian Kwacha (ZK)</option>
           <option value="zwg">zwg — Zimbabwe Gold</option>
         </optgroup>
       </select>
@@ -1237,6 +1492,42 @@
       </div>
     </a>
 
+    <a class="card" data-base="https://data.vegaszone.net/stage/pariplay/?gameCode=201">
+      <div class="thumb" style="background-image:url('images/vfl.png')"></div>
+      <div class="meta">
+        <div class="title">VFL</div>
+        <div class="tags"><span class="tag vfl">Virtual Sports</span></div>
+      </div>
+    </a>
+
+    <div class="card card-collection" id="minigamesCard" tabindex="0" role="button" aria-label="Minigames — reveal 4 options">
+      <div class="thumb-mosaic">
+        <div class="m-tile" style="background-image:url('images/mini-navigator.png')"></div>
+        <div class="m-tile" style="background-image:url('images/mini-swiminator.png')"></div>
+        <div class="m-tile" style="background-image:url('images/mini-punchinator.png')"></div>
+        <div class="m-tile" style="background-image:url('images/mini-supershoot.png')"></div>
+      </div>
+      <div class="mini-reveal">
+        <a class="mini-option" data-base="https://stage-continuum-mini-games.vegaszone.app/game?gameCode=304&processor=Fakeit&languageCode=en&token=UNDEFINED&homeUrl=UNDEFINED&fakeMode=test&fakePlayerName=Hajen&fakeCultureCode=mwk" data-phone="red" style="background-image:url('images/mini-navigator.png')">
+          <div class="mo-title">Navigator</div>
+        </a>
+        <a class="mini-option" data-base="https://stage-continuum-mini-games.vegaszone.app/game?gameCode=305&processor=Fakeit&languageCode=en&token=UNDEFINED&homeUrl=UNDEFINED&fakeMode=test&fakePlayerName=Hajen&fakeCultureCode=mwk" data-phone="blue" style="background-image:url('images/mini-swiminator.png')">
+          <div class="mo-title">Swiminator</div>
+        </a>
+        <a class="mini-option" data-base="https://stage-continuum-mini-games.vegaszone.app/game?gameCode=306&processor=Fakeit&languageCode=en&token=UNDEFINED&homeUrl=UNDEFINED&fakeMode=test&fakePlayerName=Hajen&fakeCultureCode=mwk" data-phone="red" style="background-image:url('images/mini-punchinator.png')">
+          <div class="mo-title">Punchinator</div>
+        </a>
+        <a class="mini-option" data-base="https://stage-continuum-mini-games.vegaszone.app/game?gameCode=307&processor=Fakeit&languageCode=en&token=UNDEFINED&homeUrl=UNDEFINED&fakeMode=test&fakePlayerName=Hajen&fakeCultureCode=mwk" data-phone="green" style="background-image:url('images/mini-supershoot.png')">
+          <div class="mo-title">Supershoot</div>
+        </a>
+        <button class="mini-all-btn" id="miniAllBtn" type="button">Side by side &rarr;</button>
+      </div>
+      <div class="meta">
+        <div class="title">Minigames</div>
+        <div class="tags"><span class="tag mini">Feature Phones</span></div>
+      </div>
+    </div>
+
     <a class="card" data-base="https://storage.googleapis.com/solidicon-sports-betting/dev/DragonRacingCrash/index.html?GameEntryPoint=stage-game-entry-point-api.vegaszone.app/authenticate&clientToken=sometoken&Processor=Fakeit&FakeMode=test&DbgMockHelios=true">
       <div class="thumb placeholder">
         <img class="ph-logo for-dark"  src="images/logo-icon-white.png" alt="" aria-hidden="true">
@@ -1261,6 +1552,16 @@
       </div>
     </a>
 
+  </div>
+
+  <div class="multi-phone" id="multiPhone" aria-hidden="true">
+    <button class="mp-close" id="mpClose" type="button" title="Close (Esc)" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+    <div class="mp-phone red"><iframe data-base="https://stage-continuum-mini-games.vegaszone.app/game?gameCode=304&processor=Fakeit&languageCode=en&token=UNDEFINED&homeUrl=UNDEFINED&fakeMode=test&fakePlayerName=Hajen&fakeCultureCode=mwk" title="Navigator Mini" allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write" allowfullscreen></iframe></div>
+    <div class="mp-phone blue"><iframe data-base="https://stage-continuum-mini-games.vegaszone.app/game?gameCode=305&processor=Fakeit&languageCode=en&token=UNDEFINED&homeUrl=UNDEFINED&fakeMode=test&fakePlayerName=Hajen&fakeCultureCode=mwk" title="Swiminator Mini" allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write" allowfullscreen></iframe></div>
+    <div class="mp-phone red"><iframe data-base="https://stage-continuum-mini-games.vegaszone.app/game?gameCode=306&processor=Fakeit&languageCode=en&token=UNDEFINED&homeUrl=UNDEFINED&fakeMode=test&fakePlayerName=Hajen&fakeCultureCode=mwk" title="Punchinator Mini" allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write" allowfullscreen></iframe></div>
+    <div class="mp-phone green"><iframe data-base="https://stage-continuum-mini-games.vegaszone.app/game?gameCode=307&processor=Fakeit&languageCode=en&token=UNDEFINED&homeUrl=UNDEFINED&fakeMode=test&fakePlayerName=Hajen&fakeCultureCode=mwk" title="Supershoot Mini" allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write" allowfullscreen></iframe></div>
   </div>
 
   <div class="player" id="player" aria-hidden="true">
@@ -1327,7 +1628,10 @@
         <div class="pl-empty">No messages yet — game-originated postMessages will appear here.</div>
       </div>
     </div>
-    <iframe id="playerFrame" title="Game" allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write" allowfullscreen></iframe>
+    <div class="phone-rotor">
+      <iframe id="playerFrame" title="Game" allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write" allowfullscreen></iframe>
+      <div class="phone-overlay" aria-hidden="true"></div>
+    </div>
     <div class="player-spinner" id="playerSpinner" aria-hidden="true">
       <div class="ps-ring"></div>
       <div class="ps-label">Starting up…</div>
@@ -1478,7 +1782,7 @@
       });
 
       var loadingTimer = null;
-      function openPlayer(url) {
+      function openPlayer(url, mode, phoneColor) {
         if (muted) {
           try {
             var u = new URL(url);
@@ -1490,8 +1794,16 @@
         player.classList.add('open', 'loading');
         player.setAttribute('aria-hidden', 'false');
         document.body.classList.add('player-open');
-        var screenIsPortrait = window.innerHeight > window.innerWidth;
-        setViewport(screenIsPortrait ? 'desktop' : 'portrait');
+        player.classList.remove('phone-blue', 'phone-green', 'phone-red');
+        if (mode === 'phone') {
+          player.classList.add('phone-mode');
+          player.classList.add('phone-' + (phoneColor || 'blue'));
+          setViewport('portrait');
+        } else {
+          player.classList.remove('phone-mode');
+          var screenIsPortrait = window.innerHeight > window.innerWidth;
+          setViewport(screenIsPortrait ? 'desktop' : 'portrait');
+        }
         if (loadingTimer) clearTimeout(loadingTimer);
         loadingTimer = setTimeout(function () { player.classList.remove('loading'); }, 30000);
         syncActionsVisibility();
@@ -1502,7 +1814,7 @@
         document.body.classList.remove('player-open');
         playerActions.classList.remove('show');
         playerLog.classList.remove('show');
-        player.classList.remove('viewport-portrait', 'viewport-landscape', 'ui-hidden', 'loading');
+        player.classList.remove('viewport-portrait', 'viewport-landscape', 'ui-hidden', 'loading', 'phone-mode', 'phone-blue', 'phone-green', 'phone-red');
         toggleUiBtn.classList.remove('active');
         toggleUiBtn.title = 'Hide dev panels';
         toggleUiBtn.setAttribute('aria-label', 'Hide dev panels');
@@ -1646,6 +1958,63 @@
         if (playerFrame.src && playerFrame.src !== 'about:blank') {
           player.classList.remove('loading');
         }
+      });
+
+      document.querySelectorAll('.mini-option[data-base]').forEach(function (opt) {
+        opt.href = opt.dataset.base;
+        opt.addEventListener('click', function (e) {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+          e.preventDefault();
+          e.stopPropagation();
+          openPlayer(opt.href, 'phone', opt.dataset.phone || 'blue');
+        });
+      });
+
+      document.querySelectorAll('.card-collection').forEach(function (cc) {
+        cc.addEventListener('click', function (e) {
+          if (e.target.closest('.mini-option')) return;
+          cc.classList.toggle('active');
+        });
+        cc.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            if (e.target.closest('.mini-option')) return;
+            e.preventDefault();
+            cc.classList.toggle('active');
+          }
+        });
+      });
+      (function setupMultiPhone() {
+        var btn = document.getElementById('miniAllBtn');
+        var overlay = document.getElementById('multiPhone');
+        var closeBtn = document.getElementById('mpClose');
+        if (!btn || !overlay) return;
+        var frames = overlay.querySelectorAll('iframe[data-base]');
+        function open() {
+          frames.forEach(function (f) { if (f.src !== f.dataset.base) f.src = f.dataset.base; });
+          overlay.classList.add('open');
+          overlay.setAttribute('aria-hidden', 'false');
+          document.body.classList.add('multi-open');
+        }
+        function close() {
+          overlay.classList.remove('open');
+          overlay.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('multi-open');
+          frames.forEach(function (f) { f.src = 'about:blank'; });
+        }
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          open();
+        });
+        closeBtn.addEventListener('click', close);
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+        });
+      })();
+
+      document.addEventListener('click', function (e) {
+        if (e.target.closest('.card-collection')) return;
+        document.querySelectorAll('.card-collection.active').forEach(function (c) { c.classList.remove('active'); });
       });
 
       var cards = document.querySelectorAll('a.card[data-base]');
@@ -1830,6 +2199,11 @@
       brandReset.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); resetToDefaultView(); }
       });
+
+      if (location.protocol === 'file:') {
+        var retailLink = document.getElementById('retailLink');
+        if (retailLink) retailLink.href = '../retail/index.html';
+      }
 
       syncDev();
       apply();
