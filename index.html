@@ -888,7 +888,7 @@
         top: 0.7rem;
         right: 1rem;
       }
-      .toolbar {
+      .toolbar:not(.dev-bar) {
         padding-right: 5em;
       }
       .toolbar > label {
@@ -903,6 +903,10 @@
         width: 100%;
         min-width: 0;
         max-width: 100%;
+      }
+      .dev-bar > label:not(.advanced-toggle) {
+        align-items: center;
+        text-align: center;
       }
     }
     .advanced-toggle input { position: absolute; opacity: 0; pointer-events: none; }
