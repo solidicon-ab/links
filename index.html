@@ -1656,9 +1656,13 @@
         <button type="button" data-msg='{"name":"forceCloseWebsocket","reason":"inactiveWindow","sender":"emwindow"}'>Inactive Window</button>
       </div>
       <div class="pa-section">
-        <div class="pa-label">Force next server error <span class="pa-hint" title="Game has no handler for this message yet">needs game impl</span></div>
+        <div class="pa-label">Force next server error <span class="pa-hint" title="Posts dbgPushError_&lt;code&gt;. Every response from the server returns this mock code until cleared.">sticky until cleared</span></div>
         <div class="pa-row">
           <select id="errorCodeSel">
+            <option value="1">1 — Development Error</option>
+            <option value="2">2 — Make Bet Development Error</option>
+            <option value="4">4 — Cashout Bet Development Error</option>
+            <option value="11">11 — Wrong Game State For Cashout</option>
             <option value="100">100 — Generic Error</option>
             <option value="101">101 — Service Window</option>
             <option value="102">102 — Invalid JWT</option>
@@ -1673,13 +1677,14 @@
             <option value="121">121 — Auth Token Not Found</option>
             <option value="122">122 — Auth Invalid Balance</option>
             <option value="130">130 — Make Bet Generic Error</option>
-            <option value="131">131 — Make Bet Low Balance</option>
+            <option value="131">131 — Low Funds</option>
             <option value="132">132 — Make Bet Invalid Balance</option>
             <option value="133">133 — Make Bet Invalid Amount</option>
             <option value="10001">10001 — EveryMatrix Token Not Found</option>
             <option value="10002">10002 — Daily Loss Limit Exceeded</option>
           </select>
-          <button type="button" id="forceErrorBtn">Send</button>
+          <button type="button" id="forceErrorBtn" title="postMessage({name:'dbgPushError_&lt;code&gt;'}) — every subsequent server response will return this error code until you clear it">Force</button>
+          <button type="button" id="clearErrorBtn" title="postMessage({name:'dbgPushError_null'}) — stops the server from returning the mock error">Clear</button>
         </div>
       </div>
     </div>
@@ -1933,7 +1938,12 @@
       vendorSel.addEventListener('change', syncVendorGatedButtons);
 
       forceErrorBtn.addEventListener('click', function () {
-        postToGame({ name: 'forceServerError', code: parseInt(errorCodeSel.value, 10), sender: 'emwindow' }, forceErrorBtn);
+        var code = parseInt(errorCodeSel.value, 10);
+        postToGame({ name: 'dbgPushError_' + code, sender: 'emwindow' }, forceErrorBtn);
+      });
+      var clearErrorBtn = document.getElementById('clearErrorBtn');
+      clearErrorBtn.addEventListener('click', function () {
+        postToGame({ name: 'dbgPushError_null', sender: 'emwindow' }, clearErrorBtn);
       });
 
       freeFormSend.addEventListener('click', function () {
