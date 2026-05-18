@@ -1039,6 +1039,16 @@
       color: var(--accent-bright);
       box-shadow: 0 0 0 3px rgba(0,214,252,0.32);
     }
+    .pa-section button.toggle-active {
+      background: rgba(246,82,33,0.20);
+      border-color: #f65221;
+      color: #ffb59a;
+      box-shadow: 0 0 12px rgba(246,82,33,0.45);
+    }
+    .pa-section button.toggle-active::before {
+      content: '● ';
+      color: #f65221;
+    }
     .pa-section button[disabled] {
       opacity: 0.4;
       cursor: not-allowed;
@@ -1153,6 +1163,15 @@
       color: var(--muted);
       margin-bottom: 0.2rem;
     }
+    .pl-dir {
+      display: inline-block;
+      width: 1.1em;
+      font-weight: 700;
+      margin-right: 0.35em;
+    }
+    .pl-entry.pl-in  .pl-dir { color: var(--accent); }
+    .pl-entry.pl-out .pl-dir { color: #f6b021; }
+    .pl-entry.pl-out .pl-msg { color: #ffd9b8; }
     .pl-msg {
       white-space: pre-wrap;
       word-break: break-all;
@@ -1683,14 +1702,13 @@
             <option value="10001">10001 — EveryMatrix Token Not Found</option>
             <option value="10002">10002 — Daily Loss Limit Exceeded</option>
           </select>
-          <button type="button" id="forceErrorBtn" title="postMessage({name:'dbgPushError_&lt;code&gt;'}) — every subsequent server response will return this error code until you clear it">Force</button>
-          <button type="button" id="clearErrorBtn" title="postMessage({name:'dbgPushError_null'}) — stops the server from returning the mock error">Clear</button>
+          <button type="button" id="forceErrorBtn" title="Toggle: clicking once forces every server response to return this code; clicking again (or changing the code) clears or updates it">Force</button>
         </div>
       </div>
     </div>
     <div class="player-log" id="playerLog">
       <div class="pl-header">
-        <span>Game → Host</span>
+        <span>postMessage log</span>
         <button type="button" id="playerLogClear">Clear</button>
       </div>
       <div class="pl-body" id="playerLogBody">
@@ -1912,6 +1930,7 @@
           }
         } catch (_) {}
         playerFrame.contentWindow.postMessage(payload, targetOrigin);
+        try { appendLogEntry(payload, 'out'); } catch (_) {}
         if (btn) {
           btn.classList.add('flash');
           setTimeout(function () { btn.classList.remove('flash'); }, 350);
@@ -1937,13 +1956,41 @@
       }
       vendorSel.addEventListener('change', syncVendorGatedButtons);
 
+      // Force-error is a toggle. While ACTIVE the launcher remembers the
+      // code it forced so the user can see exactly what the game will keep
+      // returning. Clicking again sends dbgPushError_null and goes inactive.
+      // Changing the dropdown while active re-sends the new code so the
+      // button always reflects what's currently in effect.
+      var activeForcedCode = null;
+      function applyForceErrorUi() {
+        if (activeForcedCode != null) {
+          forceErrorBtn.classList.add('toggle-active');
+          forceErrorBtn.textContent = 'Forcing ' + activeForcedCode + ' — click to clear';
+        } else {
+          forceErrorBtn.classList.remove('toggle-active');
+          forceErrorBtn.textContent = 'Force';
+        }
+      }
       forceErrorBtn.addEventListener('click', function () {
+        if (activeForcedCode != null) {
+          // Clear
+          postToGame({ name: 'dbgPushError_null', sender: 'emwindow' }, forceErrorBtn);
+          activeForcedCode = null;
+        } else {
+          var code = parseInt(errorCodeSel.value, 10);
+          postToGame({ name: 'dbgPushError_' + code, sender: 'emwindow' }, forceErrorBtn);
+          activeForcedCode = code;
+        }
+        applyForceErrorUi();
+      });
+      errorCodeSel.addEventListener('change', function () {
+        if (activeForcedCode == null) return;
+        // Already forcing — re-send with the new code so the active state
+        // always matches the visible dropdown selection.
         var code = parseInt(errorCodeSel.value, 10);
         postToGame({ name: 'dbgPushError_' + code, sender: 'emwindow' }, forceErrorBtn);
-      });
-      var clearErrorBtn = document.getElementById('clearErrorBtn');
-      clearErrorBtn.addEventListener('click', function () {
-        postToGame({ name: 'dbgPushError_null', sender: 'emwindow' }, clearErrorBtn);
+        activeForcedCode = code;
+        applyForceErrorUi();
       });
 
       freeFormSend.addEventListener('click', function () {
@@ -1963,20 +2010,26 @@
       if (savedFreeForm) freeFormMsg.value = savedFreeForm;
 
       function emptyLog() {
-        playerLogBody.innerHTML = '<div class="pl-empty">No messages yet — game-originated postMessages will appear here.</div>';
+        playerLogBody.innerHTML = '<div class="pl-empty">No messages yet — host ↔ game postMessages will appear here.</div>';
       }
-      function appendLogEntry(data) {
+      function appendLogEntry(data, direction) {
         var empty = playerLogBody.querySelector('.pl-empty');
         if (empty) empty.remove();
         var entry = document.createElement('div');
-        entry.className = 'pl-entry';
+        entry.className = 'pl-entry ' + (direction === 'out' ? 'pl-out' : 'pl-in');
         var time = document.createElement('span');
         time.className = 'pl-time';
-        time.textContent = new Date().toLocaleTimeString();
+        time.textContent = new Date().toLocaleTimeString() + (direction === 'out' ? ' · Host → Game' : ' · Game → Host');
         var body = document.createElement('div');
         body.className = 'pl-msg';
-        try { body.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2); }
-        catch (_) { body.textContent = String(data); }
+        var dir = document.createElement('span');
+        dir.className = 'pl-dir';
+        dir.textContent = direction === 'out' ? '→' : '←';
+        body.appendChild(dir);
+        var content = document.createElement('span');
+        try { content.textContent = typeof data === 'string' ? data : JSON.stringify(data); }
+        catch (_) { content.textContent = String(data); }
+        body.appendChild(content);
         entry.appendChild(time);
         entry.appendChild(body);
         playerLogBody.insertBefore(entry, playerLogBody.firstChild);
@@ -1984,7 +2037,7 @@
       window.addEventListener('message', function (e) {
         if (!playerFrame.contentWindow || e.source !== playerFrame.contentWindow) return;
         player.classList.remove('loading');
-        appendLogEntry(e.data);
+        appendLogEntry(e.data, 'in');
       });
       playerLogClear.addEventListener('click', emptyLog);
 
