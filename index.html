@@ -1869,6 +1869,13 @@
       });
 
       var loadingTimer = null;
+      // Push a history entry when the player opens so the browser back button
+      // (and the OS back gesture on mobile) closes the player instead of
+      // navigating away from the launcher entirely. We MUST push AFTER the
+      // iframe finishes loading the game URL, otherwise the iframe's own
+      // (cross-origin) history entry ends up on top of ours and the first
+      // back just sends the iframe to about:blank (the white-screen bug).
+      var playerHistoryPushed = false;
       function openPlayer(url, mode, phoneColor) {
         if (muted) {
           try {
@@ -1876,6 +1883,24 @@
             u.searchParams.set('Mute', 'true');
             url = u.toString();
           } catch (_) {}
+        }
+        // Attach the history pusher BEFORE setting src so the load event
+        // doesn't beat us to the listener.
+        if (!playerHistoryPushed) {
+          var pushOnce = function () {
+            playerFrame.removeEventListener('load', pushOnce);
+            if (playerHistoryPushed) return;
+            try { history.pushState({ playerOpen: true }, '', location.href); }
+            catch (_) {}
+            playerHistoryPushed = true;
+          };
+          playerFrame.addEventListener('load', pushOnce);
+          // Fallback in case the iframe never fires load (e.g. error pages
+          // suppress it on some browsers): push after a short delay so the
+          // back button still has somewhere to land.
+          setTimeout(function () {
+            if (player.classList.contains('open')) pushOnce();
+          }, 1200);
         }
         playerFrame.src = url;
         player.classList.add('open', 'loading');
@@ -1895,7 +1920,13 @@
         loadingTimer = setTimeout(function () { player.classList.remove('loading'); }, 30000);
         syncActionsVisibility();
       }
-      function closePlayer() {
+      function closePlayer(fromPopstate) {
+        // Guard against double-close (e.g. X click → history.back → popstate
+        // would otherwise re-enter and reset everything twice).
+        if (!player.classList.contains('open')) return;
+        // Strict check so an Event object passed in by addEventListener
+        // doesn't get treated as "popstate triggered".
+        var viaPop = fromPopstate === true;
         player.classList.remove('open');
         player.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('player-open');
@@ -1915,10 +1946,21 @@
         if (loadingTimer) { clearTimeout(loadingTimer); loadingTimer = null; }
         playerFrame.src = 'about:blank';
         emptyLog();
+        // If we got here from a popstate (i.e. the browser already moved
+        // back), there's nothing to pop. Otherwise consume our pushed entry.
+        if (playerHistoryPushed && !viaPop) {
+          playerHistoryPushed = false;
+          try { history.back(); } catch (_) {}
+        } else {
+          playerHistoryPushed = false;
+        }
       }
-      playerClose.addEventListener('click', closePlayer);
+      playerClose.addEventListener('click', function () { closePlayer(); });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && player.classList.contains('open')) closePlayer();
+      });
+      window.addEventListener('popstate', function () {
+        if (player.classList.contains('open')) closePlayer(true);
       });
 
       function postToGame(payload, btn) {
